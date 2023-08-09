@@ -29,14 +29,20 @@
             android:id="@+id/sourceSpinner"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="18dp" />
+            android:layout_marginBottom="18dp"
+            android:paddingTop="16dp"
+            android:paddingBottom="16dp"
+            android:background="@drawable/border_spinner" />
 
         <!-- Menu a tendina per la destinazione -->
         <Spinner
             android:id="@+id/destinationSpinner"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="8dp" />
+            android:layout_marginBottom="8dp"
+            android:paddingTop="16dp"
+            android:paddingBottom="16dp"
+            android:background="@drawable/border_spinner" />
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -44,14 +50,17 @@
             android:orientation="horizontal"
             android:gravity="center_vertical"
             android:layout_marginTop="16dp"
-            android:layout_marginBottom="8dp">
+            android:layout_marginBottom="8dp"
+            android:paddingTop="16dp"
+            android:paddingBottom="16dp"
+            android:background="@drawable/border_spinner">
 
             <!-- Icona dell'orario -->
             <ImageView
                 android:id="@+id/time_icon"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:src="@drawable/ic_baseline_home_24"
+                android:src="@drawable/baseline_access_time_filled_24"
                 android:layout_marginStart="4dp"
                 android:clickable="true" />
 
@@ -67,7 +76,7 @@
                 android:id="@+id/calendar_icon"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:src="@drawable/ic_baseline_notifications_none_24"
+                android:src="@drawable/ic_baseline_edit_calendar_24"
                 android:clickable="true"
                 android:layout_marginStart="16dp" />
 
