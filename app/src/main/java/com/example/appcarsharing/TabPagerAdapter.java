@@ -23,9 +23,9 @@ public class TabPagerAdapter extends FragmentStatePagerAdapter {
     public Fragment getItem(int position) {
         switch (position) {
             case 0:
-                return new NotificationFragment(); // Il tuo fragment per "Chiedi Passaggio"
+                return new AskRideFragment();
             case 1:
-                return new SettingsFragment(); // Il tuo fragment per "Offri Passaggio"
+                return new OfferRideFragment();
             default:
                 return new SettingsFragment();
         }
