@@ -9,25 +9,32 @@
 
     <com.google.android.material.tabs.TabLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="48dp"
         android:contentDescription = "text"
+        android:id="@+id/tab_layout"
         app:tabMode="fixed">
 
         <com.google.android.material.tabs.TabItem
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="opzione1"
-            />
+            android:text="@string/tab_chiedi_passaggio" />
 
         <com.google.android.material.tabs.TabItem
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="opzione2"
-            />
+            android:text="@string/tab_offri_passaggio" />
+
 
     </com.google.android.material.tabs.TabLayout>
 
-    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    <androidx.viewpager.widget.ViewPager
+        android:id="@+id/viewPager"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        app:layout_constraintTop_toBottomOf="@+id/tab_layout"
+        app:layout_constraintBottom_toBottomOf="parent" />
+
+   <!-- <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:app="http://schemas.android.com/apk/res-auto"
         xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
@@ -49,5 +56,5 @@
             android:layout_height="wrap_content" />
 
     </LinearLayout>
-
+-->
 </androidx.constraintlayout.widget.ConstraintLayout>
