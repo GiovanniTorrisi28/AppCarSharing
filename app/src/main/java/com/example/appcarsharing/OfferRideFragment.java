@@ -9,6 +9,7 @@ import android.graphics.Color;
 import android.icu.util.Calendar;
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 
 import android.text.TextUtils;
@@ -25,8 +26,12 @@ import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.textfield.TextInputEditText;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.HashMap;
 
@@ -45,6 +50,8 @@ public class OfferRideFragment extends Fragment {
     private String textTarga,textDettagli;
     HashMap<String, Integer> date,time;
 
+    private DatabaseReference myRef;
+
     public OfferRideFragment() {
         date = new HashMap<>();
         time = new HashMap<>();
@@ -53,6 +60,7 @@ public class OfferRideFragment extends Fragment {
         date.put("year",0);
         time.put("hour",-1);
         time.put("minute",-1);
+        myRef = FirebaseDatabase.getInstance().getReference();
     }
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -157,6 +165,26 @@ public class OfferRideFragment extends Fragment {
                     return;
                 }
 
+                //carica i dati nel db di realtime
+                myRef.child("test").setValue(selectedDestinationOption + " " + selectedSourceOption + " " + textTarga)
+                        .addOnCompleteListener(new OnCompleteListener<Void>() {
+                                    @Override
+                                    public void onComplete(@NonNull Task<Void> task) {
+                                        if (task.isSuccessful()) {
+                                            // L'operazione di scrittura è stata completata con successo
+                                            // Esegui qui le azioni desiderate in caso di successo
+                                            Toast.makeText(getContext(), "Passaggio creato", Toast.LENGTH_LONG).show();
+
+                                        } else {
+                                            // Si è verificato un errore durante l'operazione di scrittura
+                                            // Esegui qui le azioni desiderate in caso di errore
+                                            Toast.makeText(getContext(), "Errore nella creazione del passaggio", Toast.LENGTH_LONG).show();
+
+                                        }
+                                    }
+                                }
+                        );
+
             }
         });
 
@@ -229,6 +257,7 @@ public class OfferRideFragment extends Fragment {
                 .show();
     }
 
+    //da rivedere
     private void setFieldColor() {
         TextView textViewVeicolo = rootView.findViewById(R.id.textView_veicolo);
         if(!fieldFilled[0])
