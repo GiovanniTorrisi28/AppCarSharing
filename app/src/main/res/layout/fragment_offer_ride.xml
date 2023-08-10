@@ -86,6 +86,24 @@
                 android:layout_height="wrap_content"
                 android:text="Data"
                 android:layout_marginStart="8dp" />
+
+            <!-- Icona del veicolo -->
+            <ImageView
+                android:id="@+id/car_icon"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_baseline_directions_car_24"
+                android:clickable="true"
+                android:layout_marginStart="24dp" />
+
+            <!-- Etichetta per il veicolo -->
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Veicolo"
+                android:layout_marginStart="8dp" />
+
+
         </LinearLayout>
 
 

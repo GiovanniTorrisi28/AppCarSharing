@@ -1,7 +1,10 @@
 package com.example.appcarsharing;
 
+import android.app.AlertDialog;
 import android.app.DatePickerDialog;
+import android.app.Dialog;
 import android.app.TimePickerDialog;
+import android.content.DialogInterface;
 import android.icu.util.Calendar;
 import android.os.Bundle;
 
@@ -18,12 +21,13 @@ import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.TimePicker;
 
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
+import com.google.android.material.textfield.TextInputEditText;
+
 public class OfferRideFragment extends Fragment {
 
-    private ImageView calendarIcon;
+    private ImageView calendarIcon,timeIcon,carIcon;
     private DatePickerDialog.OnDateSetListener dateSetListener;
-
-    private ImageView timeIcon;
     private TimePickerDialog.OnTimeSetListener timeSetListener;
 
     private EditText sourceEditText;
@@ -68,10 +72,22 @@ public class OfferRideFragment extends Fragment {
             }
         });
 
+        //icona auto
+        carIcon = rootView.findViewById(R.id.car_icon);
+        carIcon.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                // Creazione e visualizzazione del dialog
+                openCarDialog();
+            }
+        });
+
+
+         //spinner per sorgente e destinazione
         Spinner sourceSpinner = rootView.findViewById(R.id.sourceSpinner);
         Spinner destinationSpinner = rootView.findViewById(R.id.destinationSpinner);
 
-// Popolare gli spinner con le opzioni desiderate
+       // Popolare gli spinner con le opzioni desiderate
         String[] sourceOptions = {"Sorgente", "Opzione 2", "Opzione 3"};
         String[] destinationOptions = {"Destinazione", "Opzione B", "Opzione C"};
 
@@ -125,4 +141,33 @@ public class OfferRideFragment extends Fragment {
         );
         timePickerDialog.show();
     }
+
+    private void openCarDialog() {
+        View dialogView = LayoutInflater.from(getContext()).inflate(R.layout.custom_car_dialog, null);
+
+        TextInputEditText targaEditText = dialogView.findViewById(R.id.targa_edit_text);
+        TextInputEditText dettagliEditText = dialogView.findViewById(R.id.dettagli_veicolo_edit_text);
+
+        new MaterialAlertDialogBuilder(getContext())
+                .setTitle("Title")
+                .setView(dialogView)
+                .setPositiveButton("GOT IT", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        String targa = targaEditText.getText().toString();
+                        String dettagli = dettagliEditText.getText().toString();
+
+                        // Utilizza targa e dettagli come necessario
+                    }
+                })
+                .setNegativeButton("CANCEL", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+
+                    }
+                })
+                .show();
+    }
+
+
 }
