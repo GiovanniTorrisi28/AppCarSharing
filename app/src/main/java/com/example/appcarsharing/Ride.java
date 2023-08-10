@@ -1,5 +1,6 @@
 package com.example.appcarsharing;
 
+import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.Date;
 
@@ -7,14 +8,14 @@ public class Ride {
 
     private String sorgente;
     private String destinazione;
-    private Date data;
-    private LocalTime orario;
+    private String data;
+    private String orario;
     private String targa;
     private String dettagliVeicolo;
 
     public Ride() {}
 
-    public Ride(String sorgente, String destinazione, Date data, LocalTime orario, String targa, String dettagliVeicolo) {
+    public Ride(String sorgente, String destinazione, String data, String orario, String targa, String dettagliVeicolo) {
         this.sorgente = sorgente;
         this.destinazione = destinazione;
         this.orario = orario;
@@ -39,19 +40,19 @@ public class Ride {
         this.destinazione = destinazione;
     }
 
-    public Date getData() {
+    public String getData() {
         return data;
     }
 
-    public void setData(Date data) {
+    public void setData(String data) {
         this.data = data;
     }
 
-    public LocalTime getOrario() {
+    public String getOrario() {
         return orario;
     }
 
-    public void setOrario(LocalTime orario) {
+    public void setOrario(String orario) {
         this.orario = orario;
     }
 

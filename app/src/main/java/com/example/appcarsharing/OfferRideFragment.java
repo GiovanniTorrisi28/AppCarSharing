@@ -33,6 +33,9 @@ import com.google.android.material.textfield.TextInputEditText;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
+import java.time.LocalDate;
+import java.time.LocalTime;
+import java.util.Date;
 import java.util.HashMap;
 
 public class OfferRideFragment extends Fragment {
@@ -165,8 +168,11 @@ public class OfferRideFragment extends Fragment {
                     return;
                 }
 
-                //carica i dati nel db di realtime
-                myRef.child("test").setValue(selectedDestinationOption + " " + selectedSourceOption + " " + textTarga)
+                //carica il nuovo passaggio nel db di realtime
+                Ride ride = new Ride(selectedSourceOption,selectedDestinationOption,
+                        LocalDate.of(date.get("year"),date.get("month"),date.get("day")).toString(),
+                        LocalTime.of(time.get("hour"),time.get("minute"),0).toString(),textTarga,textDettagli);
+                myRef.child("test").setValue(ride)
                         .addOnCompleteListener(new OnCompleteListener<Void>() {
                                     @Override
                                     public void onComplete(@NonNull Task<Void> task) {
