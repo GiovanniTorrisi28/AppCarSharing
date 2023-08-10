@@ -11,6 +11,7 @@ import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
 
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -22,6 +23,7 @@ import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.TimePicker;
+import android.widget.Toast;
 
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.textfield.TextInputEditText;
@@ -57,10 +59,11 @@ public class OfferRideFragment extends Fragment {
                              Bundle savedInstanceState) {
         rootView = inflater.inflate(R.layout.fragment_offer_ride, container, false);
 
-        for(int i=0;i< fieldFilled.length;i++)
+      /*  for(int i=0;i< fieldFilled.length;i++)
                 fieldFilled[i] = false;
 
         setFieldColor();
+     */
 
 
         calendarIcon = rootView.findViewById(R.id.calendar_icon);
@@ -130,22 +133,33 @@ public class OfferRideFragment extends Fragment {
         sourceSpinner.setAdapter(sourceAdapter);
         destinationSpinner.setAdapter(destinationAdapter);
 
-
-        //form
-       /* sourceEditText = rootView.findViewById(R.id.sourceEditText);
-        destinationEditText = rootView.findViewById(R.id.destinationEditText);
-
+        //gestione invio
         Button submitButton = rootView.findViewById(R.id.submitButton);
         submitButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String source = sourceEditText.getText().toString();
-                String destination = destinationEditText.getText().toString();
 
-                // Fai qualcosa con i valori delle caselle di testo
+                String selectedSourceOption = (String) sourceSpinner.getSelectedItem();
+                String selectedDestinationOption = (String) destinationSpinner.getSelectedItem();
+                //controllo sulla sorgente
+                if(selectedSourceOption.equals(sourceOptions[0])){
+                    Toast.makeText(getContext(), "Inserisci sorgente", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                //controllo sulla destinazione
+                if(selectedDestinationOption.equals(destinationOptions[0])) {
+                    Toast.makeText(getContext(), "Inserisci destinazione", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                //controllo sulla targa
+                if(TextUtils.isEmpty(textTarga)) {
+                    Toast.makeText(getContext(), "Inserisci targa, clicca su Veicolo", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+
             }
         });
-*/
+
         return rootView;
     }
 
@@ -196,12 +210,14 @@ public class OfferRideFragment extends Fragment {
                     public void onClick(DialogInterface dialogInterface, int i) {
                         textTarga = targaEditText.getText().toString();
                         textDettagli = dettagliEditText.getText().toString();
+                        /*
+                        Era codice per il colore della text view, da rivedere
                         if(!textTarga.equals("") && !textDettagli.equals("")) {
                             fieldFilled[0] = true;
                         }
                         else fieldFilled[0] = false;
                             setFieldColor();
-
+                        */
                     }
                 })
                 .setNegativeButton("CANCEL", new DialogInterface.OnClickListener() {
