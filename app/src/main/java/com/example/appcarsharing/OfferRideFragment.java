@@ -51,6 +51,7 @@ public class OfferRideFragment extends Fragment {
     private boolean[] fieldFilled = new boolean[1];
 
     private String textTarga,textDettagli;
+    private String numPosti;
     HashMap<String, Integer> date,time;
 
     private DatabaseReference myRef;
@@ -181,7 +182,8 @@ public class OfferRideFragment extends Fragment {
                 //carica il nuovo passaggio nel db di realtime
                 Ride ride = new Ride(selectedSourceOption,selectedDestinationOption,
                         LocalDate.of(date.get("year"),date.get("month") + 1,date.get("day")).toString(),
-                        LocalTime.of(time.get("hour"),time.get("minute"),0).toString(),textTarga,textDettagli);
+                        LocalTime.of(time.get("hour"),time.get("minute"),0).toString(),
+                        textTarga,textDettagli,numPosti);
                 myRef.child("test").setValue(ride)
                         .addOnCompleteListener(new OnCompleteListener<Void>() {
                                     @Override
@@ -235,9 +237,11 @@ public class OfferRideFragment extends Fragment {
 
         TextInputEditText targaEditText = dialogView.findViewById(R.id.targa_edit_text);
         TextInputEditText dettagliEditText = dialogView.findViewById(R.id.dettagli_veicolo_edit_text);
+        TextInputEditText postiEditText = dialogView.findViewById(R.id.posti_edit_text);
 
         targaEditText.setText(textTarga);
         dettagliEditText.setText(textDettagli);
+        postiEditText.setText(numPosti);
 
         new MaterialAlertDialogBuilder(getContext())
                 .setTitle("Dati veicolo")
@@ -247,6 +251,8 @@ public class OfferRideFragment extends Fragment {
                     public void onClick(DialogInterface dialogInterface, int i) {
                         textTarga = targaEditText.getText().toString();
                         textDettagli = dettagliEditText.getText().toString();
+                        numPosti = postiEditText.getText().toString();
+
                         /*
                         Era codice per il colore della text view, da rivedere
                         if(!textTarga.equals("") && !textDettagli.equals("")) {

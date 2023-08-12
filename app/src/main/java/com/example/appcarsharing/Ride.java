@@ -13,15 +13,18 @@ public class Ride {
     private String targa;
     private String dettagliVeicolo;
 
+    private String posti;
+
     public Ride() {}
 
-    public Ride(String sorgente, String destinazione, String data, String orario, String targa, String dettagliVeicolo) {
+    public Ride(String sorgente, String destinazione, String data, String orario, String targa, String dettagliVeicolo, String posti) {
         this.sorgente = sorgente;
         this.destinazione = destinazione;
         this.orario = orario;
         this.data = data;
         this.targa = targa;
         this.dettagliVeicolo = dettagliVeicolo;
+        this.posti = posti;
     }
 
     public String getSorgente() {
@@ -70,6 +73,14 @@ public class Ride {
 
     public void setDettagliVeicolo(String dettagliVeicolo) {
         this.dettagliVeicolo = dettagliVeicolo;
+    }
+
+    public String getPosti() {
+        return posti;
+    }
+
+    public void setPosti(String posti) {
+        this.posti = posti;
     }
 }
 

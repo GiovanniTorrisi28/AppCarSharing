@@ -5,18 +5,42 @@
     android:orientation="vertical"
     android:padding="30dp">
 
-    <com.google.android.material.textfield.TextInputLayout
+    <!-- Primo gruppo di caselle di testo -->
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="Targa">
+        android:orientation="horizontal">
 
-        <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/targa_edit_text"
-            android:layout_width="match_parent"
+        <com.google.android.material.textfield.TextInputLayout
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="10dp"/>
+            android:layout_weight="1"
+            android:hint="Targa">
 
-    </com.google.android.material.textfield.TextInputLayout>
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/targa_edit_text"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="5dp"
+                android:layout_marginBottom="10dp" />
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:hint="Posti">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/posti_edit_text"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="10dp"
+                android:inputType="number" />
+
+        </com.google.android.material.textfield.TextInputLayout>
+    </LinearLayout>
 
     <com.google.android.material.textfield.TextInputLayout
         android:layout_width="match_parent"
@@ -26,8 +50,15 @@
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/dettagli_veicolo_edit_text"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="4dp"
+            android:gravity="top"
+            android:inputType="textMultiLine"
+            android:paddingTop="15dp"
+            android:paddingBottom="8dp"
+            android:scrollbars="vertical" />
 
     </com.google.android.material.textfield.TextInputLayout>
+
 
 </LinearLayout>
