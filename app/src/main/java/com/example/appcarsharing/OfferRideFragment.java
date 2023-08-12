@@ -35,6 +35,7 @@ import com.google.firebase.database.FirebaseDatabase;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 
@@ -180,10 +181,12 @@ public class OfferRideFragment extends Fragment {
                 }
 
                 //carica il nuovo passaggio nel db di realtime
+                ArrayList<Utente> utenti = new ArrayList<>();
+                utenti.add(new Utente("gio","pass","n","c","1222"));
                 Ride ride = new Ride(selectedSourceOption,selectedDestinationOption,
                         LocalDate.of(date.get("year"),date.get("month") + 1,date.get("day")).toString(),
                         LocalTime.of(time.get("hour"),time.get("minute"),0).toString(),
-                        textTarga,textDettagli,numPosti);
+                        textTarga,textDettagli,numPosti,utenti);
                 myRef.child("test").setValue(ride)
                         .addOnCompleteListener(new OnCompleteListener<Void>() {
                                     @Override

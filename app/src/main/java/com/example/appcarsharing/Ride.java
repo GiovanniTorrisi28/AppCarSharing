@@ -2,7 +2,9 @@ package com.example.appcarsharing;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 public class Ride {
 
@@ -12,12 +14,12 @@ public class Ride {
     private String orario;
     private String targa;
     private String dettagliVeicolo;
-
     private String posti;
+    private List<Utente> utenti;
 
     public Ride() {}
 
-    public Ride(String sorgente, String destinazione, String data, String orario, String targa, String dettagliVeicolo, String posti) {
+    public Ride(String sorgente, String destinazione, String data, String orario, String targa, String dettagliVeicolo, String posti, List<Utente> utenti) {
         this.sorgente = sorgente;
         this.destinazione = destinazione;
         this.orario = orario;
@@ -25,6 +27,15 @@ public class Ride {
         this.targa = targa;
         this.dettagliVeicolo = dettagliVeicolo;
         this.posti = posti;
+        this.utenti = utenti;
+    }
+
+    public List<Utente> getUtenti() {
+        return utenti;
+    }
+
+    public void setUtenti(List<Utente> utenti) {
+        this.utenti = utenti;
     }
 
     public String getSorgente() {
