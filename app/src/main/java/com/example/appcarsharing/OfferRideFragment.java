@@ -65,7 +65,7 @@ public class OfferRideFragment extends Fragment {
         date.put("year",-1);
         time.put("hour",-1);
         time.put("minute",-1);
-        myRef = FirebaseDatabase.getInstance().getReference();
+        myRef = FirebaseDatabase.getInstance().getReference("passaggi");
     }
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -181,13 +181,17 @@ public class OfferRideFragment extends Fragment {
                 }
 
                 //carica il nuovo passaggio nel db di realtime
+                String rideId = myRef.push().getKey();
+
+
                 ArrayList<Utente> utenti = new ArrayList<>();
                 utenti.add(new Utente("gio","pass","n","c","1222"));
                 Ride ride = new Ride(selectedSourceOption,selectedDestinationOption,
                         LocalDate.of(date.get("year"),date.get("month") + 1,date.get("day")).toString(),
                         LocalTime.of(time.get("hour"),time.get("minute"),0).toString(),
                         textTarga,textDettagli,numPosti,utenti);
-                myRef.child("test").setValue(ride)
+
+                myRef.child(rideId).setValue(ride)
                         .addOnCompleteListener(new OnCompleteListener<Void>() {
                                     @Override
                                     public void onComplete(@NonNull Task<Void> task) {
