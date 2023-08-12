@@ -181,8 +181,7 @@ public class OfferRideFragment extends Fragment {
                 }
 
                 //carica il nuovo passaggio nel db di realtime
-                String rideId = myRef.push().getKey();
-
+                String rideId = myRef.push().getKey();  //crea la chiave del nuovo passaggio
 
                 ArrayList<Utente> utenti = new ArrayList<>();
                 utenti.add(new Utente("gio","pass","n","c","1222"));

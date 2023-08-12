@@ -51,7 +51,7 @@ public class MainActivity extends AppCompatActivity {
                     getSupportFragmentManager().beginTransaction().replace(R.id.container,settingsFragment).commit();
                     return true;
                 }
-                else if (item.getItemId() == R.id.test){
+                else if (item.getItemId() == R.id.pof){
                     getSupportFragmentManager().beginTransaction().replace(R.id.container,testFragment).commit();
                     return true;
                 }
