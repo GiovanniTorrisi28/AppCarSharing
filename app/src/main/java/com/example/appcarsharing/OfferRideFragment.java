@@ -58,9 +58,9 @@ public class OfferRideFragment extends Fragment {
     public OfferRideFragment() {
         date = new HashMap<>();
         time = new HashMap<>();
-        date.put("day",0);
-        date.put("month",0);
-        date.put("year",0);
+        date.put("day",-1);
+        date.put("month",-1);
+        date.put("year",-1);
         time.put("hour",-1);
         time.put("minute",-1);
         myRef = FirebaseDatabase.getInstance().getReference();
@@ -93,7 +93,7 @@ public class OfferRideFragment extends Fragment {
         calendarIcon.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                showDatePicker(date.get("day"),date.get("month"),date.get("year"));
+                showDatePicker(Calendar.getInstance().get(Calendar.DAY_OF_MONTH),Calendar.getInstance().get(Calendar.MONTH),Calendar.getInstance().get(Calendar.YEAR));
             }
         });
 
@@ -112,7 +112,7 @@ public class OfferRideFragment extends Fragment {
         timeIcon.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                showTimePicker(time.get("hour"),time.get("minute"));
+                showTimePicker(Calendar.getInstance().get(Calendar.HOUR_OF_DAY),Calendar.getInstance().get(Calendar.MINUTE));
             }
         });
 
@@ -168,9 +168,19 @@ public class OfferRideFragment extends Fragment {
                     return;
                 }
 
+                if(date.get("day").equals(-1) || date.get("month").equals(-1) || date.get("year").equals(-1)) {
+                    Toast.makeText(getContext(), "Inserisci data", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+
+                if(time.get("hour").equals(-1) || time.get("minute").equals(-1)) {
+                    Toast.makeText(getContext(), "Inserisci orario", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+
                 //carica il nuovo passaggio nel db di realtime
                 Ride ride = new Ride(selectedSourceOption,selectedDestinationOption,
-                        LocalDate.of(date.get("year"),date.get("month"),date.get("day")).toString(),
+                        LocalDate.of(date.get("year"),date.get("month") + 1,date.get("day")).toString(),
                         LocalTime.of(time.get("hour"),time.get("minute"),0).toString(),textTarga,textDettagli);
                 myRef.child("test").setValue(ride)
                         .addOnCompleteListener(new OnCompleteListener<Void>() {
@@ -199,10 +209,6 @@ public class OfferRideFragment extends Fragment {
 
     // Mostra il DatePicker
     private void showDatePicker(Integer day,Integer month, Integer year) {
-        year = (year.equals(0) ? Calendar.getInstance().get(Calendar.YEAR) : year);
-        month = (month.equals(0) ? Calendar.getInstance().get(Calendar.MONTH) : month);
-        day = (day.equals(0) ? Calendar.getInstance().get(Calendar.DAY_OF_MONTH) : day);
-
         DatePickerDialog datePickerDialog = new DatePickerDialog(
                 requireContext(),
                 dateSetListener,
@@ -214,9 +220,6 @@ public class OfferRideFragment extends Fragment {
     }
 
     private void showTimePicker(Integer hour, Integer minute) {
-        hour = (hour.equals(-1) ? Calendar.getInstance().get(Calendar.HOUR_OF_DAY) : hour);
-        minute = (minute.equals(-1) ? Calendar.getInstance().get(Calendar.MINUTE) : minute);
-
         TimePickerDialog timePickerDialog = new TimePickerDialog(
                 requireContext(),
                 timeSetListener,
