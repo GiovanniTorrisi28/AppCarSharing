@@ -30,6 +30,13 @@ public class Ride {
         this.utenti = utenti;
     }
 
+    //per test
+    public Ride(String sorgente, String destinazione, String posti){
+        this.sorgente = sorgente;
+        this.destinazione = destinazione;
+        this.posti = posti;
+    }
+
     public List<Utente> getUtenti() {
         return utenti;
     }

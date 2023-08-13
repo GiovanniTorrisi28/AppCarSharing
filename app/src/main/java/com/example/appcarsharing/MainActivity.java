@@ -18,7 +18,7 @@ public class MainActivity extends AppCompatActivity {
     HomeFragment homeFragment = new HomeFragment();
     SettingsFragment settingsFragment = new SettingsFragment();
     NotificationFragment notificationFragment = new NotificationFragment();
-
+    PofFragment pofFragment = new PofFragment();
     TestFragment testFragment = new TestFragment();
 
     @Override
@@ -52,6 +52,10 @@ public class MainActivity extends AppCompatActivity {
                     return true;
                 }
                 else if (item.getItemId() == R.id.pof){
+                    getSupportFragmentManager().beginTransaction().replace(R.id.container,pofFragment).commit();
+                    return true;
+                }
+                else if (item.getItemId() == R.id.test){
                     getSupportFragmentManager().beginTransaction().replace(R.id.container,testFragment).commit();
                     return true;
                 }

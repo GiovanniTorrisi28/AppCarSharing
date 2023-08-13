@@ -27,7 +27,7 @@ public class PofFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View rootView =  inflater.inflate(R.layout.fragment_test, container, false);
+        View rootView =  inflater.inflate(R.layout.fragment_pof, container, false);
         Configuration.getInstance().load(getContext(), PreferenceManager.getDefaultSharedPreferences(getContext()));
 
         // Collega la variabile mapView al layout
