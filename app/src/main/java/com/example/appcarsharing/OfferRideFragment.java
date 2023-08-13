@@ -185,7 +185,7 @@ public class OfferRideFragment extends Fragment {
 
                 ArrayList<Utente> utenti = new ArrayList<>();
                 utenti.add(new Utente("gio","pass","n","c","1222"));
-                Ride ride = new Ride(selectedSourceOption,selectedDestinationOption,
+                Ride ride = new Ride("Giovanni Torrisi", selectedSourceOption,selectedDestinationOption,
                         LocalDate.of(date.get("year"),date.get("month") + 1,date.get("day")).toString(),
                         LocalTime.of(time.get("hour"),time.get("minute"),0).toString(),
                         textTarga,textDettagli,numPosti,utenti);
