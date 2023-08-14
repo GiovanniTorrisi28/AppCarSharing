@@ -5,6 +5,113 @@
     android:layout_height="match_parent"
     tools:context=".AskRideFragment">
 
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:gravity="center"
+        android:padding="15dp">
 
+        <TextView
+            android:text="Cerca Passaggio"
+            android:textSize="25sp"
+            android:textStyle="bold"
+            android:gravity="center"
+            android:layout_marginBottom="28dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+
+        <Spinner
+            android:id="@+id/sourceSpinner"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="18dp"
+            android:paddingTop="16dp"
+            android:paddingBottom="16dp"
+            android:background="@drawable/border_spinner" />
+
+
+        <Spinner
+            android:id="@+id/destinationSpinner"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="8dp"
+            android:paddingTop="16dp"
+            android:paddingBottom="16dp"
+            android:background="@drawable/border_spinner" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            android:layout_marginTop="16dp"
+            android:layout_marginBottom="8dp"
+            android:paddingTop="16dp"
+            android:paddingBottom="16dp"
+            android:background="@drawable/border_spinner">
+
+
+            <ImageView
+                android:id="@+id/time_icon_start"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:src="@drawable/baseline_access_time_filled_24"
+                android:layout_marginStart="4dp"
+                android:clickable="true" />
+
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Orario"
+                android:layout_marginStart="8dp" />
+
+            <ImageView
+                android:id="@+id/time_icon_end"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:src="@drawable/baseline_access_time_filled_24"
+                android:layout_marginStart="4dp"
+                android:clickable="true" />
+
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Orario"
+                android:layout_marginStart="8dp" />
+
+
+
+            <ImageView
+                android:id="@+id/calendar_icon"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:src="@drawable/ic_baseline_edit_calendar_24"
+                android:clickable="true"
+                android:layout_marginStart="16dp" />
+
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Data"
+                android:layout_marginStart="8dp" />
+
+
+        </LinearLayout>
+
+
+        <Button
+            android:id="@+id/submitButton"
+            android:text="Crea"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+    </LinearLayout>
 
 </FrameLayout>

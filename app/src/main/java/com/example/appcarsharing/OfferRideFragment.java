@@ -30,6 +30,8 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.textfield.TextInputEditText;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
@@ -56,6 +58,7 @@ public class OfferRideFragment extends Fragment {
     HashMap<String, Integer> date,time;
 
     private DatabaseReference myRef;
+    private FirebaseAuth mAuth;
 
     public OfferRideFragment() {
         date = new HashMap<>();
@@ -66,18 +69,19 @@ public class OfferRideFragment extends Fragment {
         time.put("hour",-1);
         time.put("minute",-1);
         myRef = FirebaseDatabase.getInstance().getReference("passaggi");
+        mAuth = FirebaseAuth.getInstance();
+
     }
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         rootView = inflater.inflate(R.layout.fragment_offer_ride, container, false);
-
+        FirebaseUser currentUser = mAuth.getCurrentUser();
       /*  for(int i=0;i< fieldFilled.length;i++)
                 fieldFilled[i] = false;
 
         setFieldColor();
      */
-
 
         calendarIcon = rootView.findViewById(R.id.calendar_icon);
         // Imposta il listener per gestire la selezione della data
@@ -184,8 +188,9 @@ public class OfferRideFragment extends Fragment {
                 String rideId = myRef.push().getKey();  //crea la chiave del nuovo passaggio
 
                 ArrayList<Utente> utenti = new ArrayList<>();
-                utenti.add(new Utente("gio","pass","n","c","1222"));
-                Ride ride = new Ride("Giovanni Torrisi", selectedSourceOption,selectedDestinationOption,
+                utenti.add(new Utente(currentUser.getEmail(),"pass","n","c","1222"));
+                Ride ride = new Ride(currentUser.getEmail().substring(0, currentUser.getEmail().indexOf("@")),
+                        selectedSourceOption,selectedDestinationOption,
                         LocalDate.of(date.get("year"),date.get("month") + 1,date.get("day")).toString(),
                         LocalTime.of(time.get("hour"),time.get("minute"),0).toString(),
                         textTarga,textDettagli,numPosti,utenti);
