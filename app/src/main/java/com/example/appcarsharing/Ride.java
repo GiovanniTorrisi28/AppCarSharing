@@ -16,11 +16,13 @@ public class Ride {
     private String targa;
     private String dettagliVeicolo;
     private String posti;
+    private String id;
     private List<Utente> utenti;
 
     public Ride() {}
 
-    public Ride(String guidatore, String sorgente, String destinazione, String data, String orario, String targa, String dettagliVeicolo, String posti, List<Utente> utenti) {
+    public Ride(String id, String guidatore, String sorgente, String destinazione, String data, String orario, String targa, String dettagliVeicolo, String posti, List<Utente> utenti) {
+        this.id = id;
         this.guidatore = guidatore;
         this.sorgente = sorgente;
         this.destinazione = destinazione;
@@ -32,12 +34,6 @@ public class Ride {
         this.utenti = utenti;
     }
 
-    //per test
-    public Ride(String sorgente, String destinazione, String posti){
-        this.sorgente = sorgente;
-        this.destinazione = destinazione;
-        this.posti = posti;
-    }
 
     public String getGuidatore() {
         return guidatore;
@@ -103,12 +99,35 @@ public class Ride {
         this.dettagliVeicolo = dettagliVeicolo;
     }
 
+    @Override
+    public String toString() {
+        return "Ride{" +
+                "guidatore='" + guidatore + '\'' +
+                ", sorgente='" + sorgente + '\'' +
+                ", destinazione='" + destinazione + '\'' +
+                ", data='" + data + '\'' +
+                ", orario='" + orario + '\'' +
+                ", targa='" + targa + '\'' +
+                ", dettagliVeicolo='" + dettagliVeicolo + '\'' +
+                ", posti='" + posti + '\'' +
+                ", utenti=" + utenti +
+                '}';
+    }
+
     public String getPosti() {
         return posti;
     }
 
     public void setPosti(String posti) {
         this.posti = posti;
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
     }
 }
 

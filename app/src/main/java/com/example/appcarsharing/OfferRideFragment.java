@@ -188,8 +188,9 @@ public class OfferRideFragment extends Fragment {
                 String rideId = myRef.push().getKey();  //crea la chiave del nuovo passaggio
 
                 ArrayList<Utente> utenti = new ArrayList<>();
-                utenti.add(new Utente(currentUser.getEmail(),"pass","n","c","1222"));
-                Ride ride = new Ride(currentUser.getEmail().substring(0, currentUser.getEmail().indexOf("@")),
+                utenti.add(new Utente(currentUser.getEmail(),"","","",""));
+
+                Ride ride = new Ride(rideId,currentUser.getEmail().substring(0, currentUser.getEmail().indexOf("@")),
                         selectedSourceOption,selectedDestinationOption,
                         LocalDate.of(date.get("year"),date.get("month") + 1,date.get("day")).toString(),
                         LocalTime.of(time.get("hour"),time.get("minute"),0).toString(),

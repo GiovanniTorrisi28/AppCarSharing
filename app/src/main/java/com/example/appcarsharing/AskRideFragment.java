@@ -7,7 +7,9 @@ import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 
+import android.os.TestLooperManager;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -88,14 +90,20 @@ public class AskRideFragment extends Fragment {
         View.OnClickListener handleClickTimeStart = new  View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                showTimePicker(Calendar.getInstance().get(Calendar.HOUR_OF_DAY),Calendar.getInstance().get(Calendar.MINUTE),timeStartSetListener);
+                Integer hour = timeStart.get("hour").equals(-1) ? Calendar.getInstance().get(Calendar.HOUR_OF_DAY) : timeStart.get("hour");
+                Integer minute = timeStart.get("minute").equals(-1) ? Calendar.getInstance().get(Calendar.MINUTE) : timeStart.get("minute");
+
+                showTimePicker(hour,minute,timeStartSetListener);
             }
         };
 
         View.OnClickListener handleClickTimeEnd = new  View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                showTimePicker(Calendar.getInstance().get(Calendar.HOUR_OF_DAY),Calendar.getInstance().get(Calendar.MINUTE),timeEndSetListener);
+                Integer hour = timeEnd.get("hour").equals(-1) ? Calendar.getInstance().get(Calendar.HOUR_OF_DAY) : timeEnd.get("hour");
+                Integer minute = timeEnd.get("minute").equals(-1) ? Calendar.getInstance().get(Calendar.MINUTE) : timeEnd.get("minute");
+
+                showTimePicker(hour,minute,timeEndSetListener);
             }
         };
 
@@ -156,10 +164,37 @@ public class AskRideFragment extends Fragment {
                     Toast.makeText(getContext(), "Inserisci fine fascia oraria", Toast.LENGTH_SHORT).show();
                     return;
                 }
+
+                //apri nuovo fragment
+
+                TestFragment newFragment =  new TestFragment();
+                Bundle args = new Bundle();
+                args.putString("date",date.get("day") + "/" + date.get("month") + "/" + date.get("year"));
+                args.putString("timeStart",timeStart.get("hour") + ":" + timeStart.get("minute"));
+                args.putString("timeEnd",timeEnd.get("hour") + ":" + timeEnd.get("minute"));
+                args.putString("source",selectedSourceOption);
+                args.putString("destination",selectedDestinationOption);
+                newFragment.setArguments(args);
+
+                // Ottieni il FragmentManager e avvia una transazione
+                FragmentManager fragmentManager = requireActivity().getSupportFragmentManager();
+                FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+
+                // Sostituisci il fragment esistente con il nuovo fragment
+                fragmentTransaction.replace(R.id.container, newFragment);
+
+                // Aggiungi la transazione allo stack indietro in modo che possa essere annullata
+                fragmentTransaction.addToBackStack(null);
+
+                // Esegui la transazione
+                fragmentTransaction.commit();
+
             }});
 
                 return rootView;
     }
+
+
 
     private void showTimePicker(Integer hour, Integer minute,TimePickerDialog.OnTimeSetListener listener) {
         TimePickerDialog timePickerDialog = new TimePickerDialog(

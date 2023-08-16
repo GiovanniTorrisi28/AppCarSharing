@@ -4,6 +4,7 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -12,6 +13,14 @@ import android.preference.PreferenceManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
+
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+
 import org.osmdroid.config.Configuration;
 import org.osmdroid.views.MapView;
 import org.osmdroid.util.GeoPoint;
@@ -43,9 +52,39 @@ public class TestFragment extends Fragment {
         // Inizializza l'adattatore e collegalo al RecyclerView
         adapter = new RideAdapter(passaggiList);
         recyclerView.setAdapter(adapter);
-        passaggiList.add(new Ride("sorgente","destinazione","3"));
-        // Recupera i dati dei passaggi da Firebase e aggiungili alla lista passaggiList
-        // ...
+
+
+        //lettura dei parametri
+        TextView textView = rootView.findViewById(R.id.textView);
+        Bundle args = getArguments();
+        textView.setText("Data: " + args.getString("date") +  "\n"
+                + "Fascia Oraria: " + args.getString("timeStart") + "-" + args.getString("timeEnd") + "\n"
+                + "Sorgente: " + args.getString("source") + "\n"
+                + "Destinazione: " + args.getString("destination"));
+
+
+
+        //aggiungi dati alla lista
+        DatabaseReference myRef = FirebaseDatabase.getInstance().getReference("passaggi");
+        myRef.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                passaggiList.clear();
+                for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+
+                    Ride ride = snapshot.getValue(Ride.class);
+                    System.out.println(ride);
+                    passaggiList.add(ride);
+                }
+                adapter.notifyDataSetChanged();
+            }
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+
+        });
+
 
         return rootView;
     }
