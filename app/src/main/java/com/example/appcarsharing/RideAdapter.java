@@ -5,12 +5,17 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -64,18 +69,52 @@ public class RideAdapter extends RecyclerView.Adapter<RideAdapter.RideViewHolder
             prenotaBtn.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    // Esegui l'azione desiderata quando il pulsante viene cliccato
-                    List<Utente> passeggeri = passaggio.getUtenti();
-                    passeggeri.add(new Utente("email","password","nome","cognome","telefono"));
-                    passaggio.setUtenti(passeggeri);
-                    //aggiornare i dati su firebase
-                    DatabaseReference myRef = FirebaseDatabase.getInstance().getReference("passaggi");
-                    Map<String,Object> updates = new HashMap<>();
-                    updates.put("utenti",passeggeri);
-                    updates.put("posti",String.valueOf(Integer.parseInt(passaggio.getPosti()) - 1));
-                    myRef.child(passaggio.getId()).updateChildren(updates);
+                    //prendi i dati dell'utente
+                    String email = FirebaseAuth.getInstance().getCurrentUser().getEmail();
+                    String id = email.substring(0, email.indexOf("@"));
+                    DatabaseReference myRef = FirebaseDatabase.getInstance().getReference("Utenti").child(id);
+                    final Utente[] utente = {new Utente()};
+                    myRef.addValueEventListener(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(DataSnapshot dataSnapshot) {
+                            if (dataSnapshot.exists()) {
+                                utente[0] = dataSnapshot.getValue(Utente.class);
+                                //carica l'utente nella lista dei passeggeri
+                                loadData(passaggio,utente[0],v);
+                            }
+                        }
+
+                        @Override
+                        public void onCancelled(DatabaseError databaseError) {
+                            System.out.println("errore nella lettura dell'utente da firebase, in ride adapter");
+                        }
+                    });
+
                 }
             });
         }
+
+        public void loadData(Ride passaggio, Utente utente, View v) {
+            List<Utente> passeggeri = passaggio.getUtenti();
+            passeggeri.add(utente);
+            passaggio.setUtenti(passeggeri);
+            //aggiornare i dati su firebase
+            DatabaseReference myRef = FirebaseDatabase.getInstance().getReference("passaggi");
+            Map<String,Object> updates = new HashMap<>();
+            updates.put("utenti",passeggeri);
+            updates.put("posti",String.valueOf(Integer.parseInt(passaggio.getPosti()) - 1));
+            myRef.child(passaggio.getId()).updateChildren(updates, new DatabaseReference.CompletionListener() {
+                @Override
+                public void onComplete(DatabaseError databaseError, DatabaseReference databaseReference) {
+                    if (databaseError == null) {
+                        Toast.makeText(v.getContext(), "Passaggio prenotato", Toast.LENGTH_LONG).show();
+                    } else {
+                        Toast.makeText(v.getContext(), "Errore nella prenotazione del passaggio", Toast.LENGTH_LONG).show();
+                    }
+                }
+            });
+        }
+
+
     }
 }
