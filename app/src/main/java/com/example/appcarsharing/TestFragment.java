@@ -15,6 +15,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -62,7 +63,8 @@ public class TestFragment extends Fragment {
                 + "Sorgente: " + args.getString("source") + "\n"
                 + "Destinazione: " + args.getString("destination"));
 
-
+        String email = FirebaseAuth.getInstance().getCurrentUser().getEmail();
+        String userId = email.substring(0, email.indexOf("@"));
 
         //aggiungi dati alla lista
         DatabaseReference myRef = FirebaseDatabase.getInstance().getReference("passaggi");
@@ -73,8 +75,18 @@ public class TestFragment extends Fragment {
                 for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
 
                     Ride ride = snapshot.getValue(Ride.class);
-                    System.out.println(ride);
-                    passaggiList.add(ride);
+                    //controlli
+                    boolean isPasseggero = false;
+                    if(ride.getGuidatore().equals(userId))
+                        continue;
+                    for(Utente u: ride.getUtenti()){
+                        if(u.getEmail().substring(0,u.getEmail().indexOf("@")).equals(userId)){
+                            isPasseggero = true;
+                            break;
+                        }
+                    }
+                    if(!isPasseggero)
+                       passaggiList.add(ride);
                 }
                 adapter.notifyDataSetChanged();
             }
