@@ -5,20 +5,9 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
-    <!-- Altri elementi del layout -->
     <TextView
-        android:id="@+id/textView"
-        android:textSize="25sp"
-        android:textStyle="bold"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
-
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/recycler_view"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="16dp" />
-
-    <!-- Altri elementi del layout -->
+        android:text="test"/>
 
 </LinearLayout>

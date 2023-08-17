@@ -23,6 +23,7 @@ import android.widget.TimePicker;
 import android.widget.Toast;
 
 import java.util.HashMap;
+import java.util.List;
 
 public class AskRideFragment extends Fragment {
 
@@ -167,7 +168,7 @@ public class AskRideFragment extends Fragment {
 
                 //apri nuovo fragment
 
-                TestFragment newFragment =  new TestFragment();
+                ListRideFragment newFragment =  new ListRideFragment();
                 Bundle args = new Bundle();
                 args.putString("date",date.get("day") + "/" + date.get("month") + "/" + date.get("year"));
                 args.putString("timeStart",timeStart.get("hour") + ":" + timeStart.get("minute"));
