@@ -5,5 +5,12 @@
         <!-- <item name="colorPrimary">@color/my_light_primary</item> -->
     </style>
 
-    <style name="Theme.AppCarSharing" parent="Base.Theme.AppCarSharing" />
+    <style name="Theme.AppCarSharing" parent="Theme.Material3.Light">
+          <!-- Personalizza qui il tuo tema-->
+        <item name="colorPrimary">#FF26B8AB</item>
+        <item name="colorPrimaryDark">#FF26B8AB</item>
+
+    </style>
+
+
 </resources>

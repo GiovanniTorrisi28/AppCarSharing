@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <style name="DialogTheme" parent="Theme.AppCompat.Light.Dialog">
-        <item name="colorAccent">#05CBFD</item>
+        <item name="colorAccent">@color/lightgreen</item>
         <item name="android:windowBackground">@drawable/rounded_border</item>
     </style>
 </resources>

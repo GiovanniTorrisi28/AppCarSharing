@@ -10,18 +10,18 @@
         xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical"
         android:gravity="center"
+        android:orientation="vertical"
         android:padding="15dp">
 
         <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="28dp"
+            android:gravity="center"
             android:text="Cerca Passaggio"
             android:textSize="25sp"
-            android:textStyle="bold"
-            android:gravity="center"
-            android:layout_marginBottom="28dp"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
+            android:textStyle="bold" />
 
 
         <Spinner
@@ -29,9 +29,9 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="18dp"
+            android:background="@drawable/border_spinner"
             android:paddingTop="16dp"
-            android:paddingBottom="16dp"
-            android:background="@drawable/border_spinner" />
+            android:paddingBottom="16dp" />
 
 
         <Spinner
@@ -39,77 +39,75 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="8dp"
+            android:background="@drawable/border_spinner"
             android:paddingTop="16dp"
-            android:paddingBottom="16dp"
-            android:background="@drawable/border_spinner" />
+            android:paddingBottom="16dp" />
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:gravity="center_vertical"
             android:layout_marginTop="16dp"
             android:layout_marginBottom="8dp"
+            android:background="@drawable/border_spinner"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
             android:paddingTop="16dp"
-            android:paddingBottom="16dp"
-            android:background="@drawable/border_spinner">
+            android:paddingBottom="16dp">
 
 
             <ImageView
                 android:id="@+id/time_icon_start"
                 android:layout_width="30dp"
                 android:layout_height="30dp"
-                android:src="@drawable/baseline_access_time_filled_24"
                 android:layout_marginStart="4dp"
-                android:clickable="true" />
+                android:clickable="true"
+                android:src="@drawable/baseline_access_time_filled_24" />
 
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Inizio fascia"
-                android:layout_marginStart="8dp" />
+                android:layout_marginStart="8dp"
+                android:text="Inizio fascia" />
 
             <ImageView
                 android:id="@+id/time_icon_end"
                 android:layout_width="30dp"
                 android:layout_height="30dp"
-                android:src="@drawable/baseline_access_time_filled_24"
                 android:layout_marginStart="4dp"
-                android:clickable="true" />
+                android:clickable="true"
+                android:src="@drawable/baseline_access_time_filled_24" />
 
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Fine fascia"
-                android:layout_marginStart="8dp" />
+                android:layout_marginStart="8dp"
+                android:text="Fine fascia" />
 
 
             <ImageView
                 android:id="@+id/calendar_icon"
                 android:layout_width="30dp"
                 android:layout_height="30dp"
-                android:src="@drawable/ic_baseline_edit_calendar_24"
+                android:layout_marginStart="16dp"
                 android:clickable="true"
-                android:layout_marginStart="16dp" />
+                android:src="@drawable/ic_baseline_edit_calendar_24" />
 
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Data"
-                android:layout_marginStart="8dp" />
-
+                android:layout_marginStart="8dp"
+                android:text="Data" />
 
         </LinearLayout>
 
-
         <Button
             android:id="@+id/submitButton"
-            android:text="Cerca"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:text="Cerca" />
 
     </LinearLayout>
 
