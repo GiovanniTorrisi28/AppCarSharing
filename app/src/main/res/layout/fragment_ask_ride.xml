@@ -107,7 +107,7 @@
 
         <Button
             android:id="@+id/submitButton"
-            android:text="Crea"
+            android:text="Cerca"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
 

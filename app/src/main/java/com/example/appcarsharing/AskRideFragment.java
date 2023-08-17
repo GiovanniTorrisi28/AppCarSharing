@@ -200,6 +200,7 @@ public class AskRideFragment extends Fragment {
     private void showTimePicker(Integer hour, Integer minute,TimePickerDialog.OnTimeSetListener listener) {
         TimePickerDialog timePickerDialog = new TimePickerDialog(
                 requireContext(),
+                R.style.DialogTheme,
                 listener,
                 hour,
                 minute,
@@ -211,6 +212,7 @@ public class AskRideFragment extends Fragment {
     private void showDatePicker(Integer day,Integer month, Integer year) {
         DatePickerDialog datePickerDialog = new DatePickerDialog(
                 requireContext(),
+                R.style.DialogTheme,
                 dateSetListener,
                 year,
                 month,

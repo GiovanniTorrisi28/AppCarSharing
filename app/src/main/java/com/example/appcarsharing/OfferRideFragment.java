@@ -28,6 +28,7 @@ import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.android.material.datepicker.MaterialDatePicker;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.firebase.auth.FirebaseAuth;
@@ -241,12 +242,12 @@ public class OfferRideFragment extends Fragment {
 
     // Mostra il DatePicker
     private void showDatePicker(Integer day, Integer month, Integer year) {
-        DatePickerDialog datePickerDialog = new DatePickerDialog(requireContext(), dateSetListener, year, month, day);
+        DatePickerDialog datePickerDialog = new DatePickerDialog(requireContext(),R.style.DialogTheme, dateSetListener, year, month, day);
         datePickerDialog.show();
     }
 
     private void showTimePicker(Integer hour, Integer minute) {
-        TimePickerDialog timePickerDialog = new TimePickerDialog(requireContext(), timeSetListener, hour, minute, true);
+        TimePickerDialog timePickerDialog = new TimePickerDialog(requireContext(),R.style.DialogTheme, timeSetListener, hour, minute, true);
         timePickerDialog.show();
     }
 
