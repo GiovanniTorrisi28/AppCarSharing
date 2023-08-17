@@ -32,8 +32,11 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
@@ -44,7 +47,7 @@ import java.util.HashMap;
 public class OfferRideFragment extends Fragment {
 
     private View rootView;
-    private ImageView calendarIcon,timeIcon,carIcon;
+    private ImageView calendarIcon, timeIcon, carIcon;
     private DatePickerDialog.OnDateSetListener dateSetListener;
     private TimePickerDialog.OnTimeSetListener timeSetListener;
 
@@ -53,35 +56,38 @@ public class OfferRideFragment extends Fragment {
 
     private boolean[] fieldFilled = new boolean[1];
 
-    private String textTarga,textDettagli;
+    private String textTarga, textDettagli;
     private String numPosti;
-    HashMap<String, Integer> date,time;
+    HashMap<String, Integer> date, time;
 
     private DatabaseReference myRef;
     private FirebaseAuth mAuth;
+    private FirebaseUser currentUser;
 
     public OfferRideFragment() {
         date = new HashMap<>();
         time = new HashMap<>();
-        date.put("day",-1);
-        date.put("month",-1);
-        date.put("year",-1);
-        time.put("hour",-1);
-        time.put("minute",-1);
-        myRef = FirebaseDatabase.getInstance().getReference("passaggi");
+        date.put("day", -1);
+        date.put("month", -1);
+        date.put("year", -1);
+        time.put("hour", -1);
+        time.put("minute", -1);
         mAuth = FirebaseAuth.getInstance();
-
+        currentUser = mAuth.getCurrentUser();
+        myRef = FirebaseDatabase.getInstance().getReference("Utenti").
+                child(currentUser.getEmail().substring(0, currentUser.getEmail().indexOf("@")));
     }
+
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         rootView = inflater.inflate(R.layout.fragment_offer_ride, container, false);
-        FirebaseUser currentUser = mAuth.getCurrentUser();
+
       /*  for(int i=0;i< fieldFilled.length;i++)
                 fieldFilled[i] = false;
 
         setFieldColor();
      */
+        final Utente[] utente = new Utente[1];
 
         calendarIcon = rootView.findViewById(R.id.calendar_icon);
         // Imposta il listener per gestire la selezione della data
@@ -89,9 +95,9 @@ public class OfferRideFragment extends Fragment {
             @Override
             public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
                 // Qui puoi gestire la data selezionata dall'utente
-                date.put("day",dayOfMonth);
-                date.put("month",month);
-                date.put("year",year);
+                date.put("day", dayOfMonth);
+                date.put("month", month);
+                date.put("year", year);
             }
         };
 
@@ -99,7 +105,7 @@ public class OfferRideFragment extends Fragment {
         calendarIcon.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                showDatePicker(Calendar.getInstance().get(Calendar.DAY_OF_MONTH),Calendar.getInstance().get(Calendar.MONTH),Calendar.getInstance().get(Calendar.YEAR));
+                showDatePicker(Calendar.getInstance().get(Calendar.DAY_OF_MONTH), Calendar.getInstance().get(Calendar.MONTH), Calendar.getInstance().get(Calendar.YEAR));
             }
         });
 
@@ -109,8 +115,8 @@ public class OfferRideFragment extends Fragment {
             @Override
             public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
                 // Qui puoi gestire l'orario selezionato dall'utente
-                time.put("hour",hourOfDay);
-                time.put("minute",minute);
+                time.put("hour", hourOfDay);
+                time.put("minute", minute);
             }
         };
 
@@ -118,7 +124,7 @@ public class OfferRideFragment extends Fragment {
         timeIcon.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                showTimePicker(Calendar.getInstance().get(Calendar.HOUR_OF_DAY),Calendar.getInstance().get(Calendar.MINUTE));
+                showTimePicker(Calendar.getInstance().get(Calendar.HOUR_OF_DAY), Calendar.getInstance().get(Calendar.MINUTE));
             }
         });
 
@@ -133,11 +139,11 @@ public class OfferRideFragment extends Fragment {
         });
 
 
-         //spinner per sorgente e destinazione
+        //spinner per sorgente e destinazione
         Spinner sourceSpinner = rootView.findViewById(R.id.sourceSpinner);
         Spinner destinationSpinner = rootView.findViewById(R.id.destinationSpinner);
 
-       // Popolare gli spinner con le opzioni desiderate
+        // Popolare gli spinner con le opzioni desiderate
         String[] sourceOptions = {"Sorgente", "Opzione 2", "Opzione 3"};
         String[] destinationOptions = {"Destinazione", "Opzione B", "Opzione C"};
 
@@ -159,61 +165,48 @@ public class OfferRideFragment extends Fragment {
                 String selectedSourceOption = (String) sourceSpinner.getSelectedItem();
                 String selectedDestinationOption = (String) destinationSpinner.getSelectedItem();
                 //controllo sulla sorgente
-                if(selectedSourceOption.equals(sourceOptions[0])){
+                if (selectedSourceOption.equals(sourceOptions[0])) {
                     Toast.makeText(getContext(), "Inserisci sorgente", Toast.LENGTH_SHORT).show();
                     return;
                 }
                 //controllo sulla destinazione
-                if(selectedDestinationOption.equals(destinationOptions[0])) {
+                if (selectedDestinationOption.equals(destinationOptions[0])) {
                     Toast.makeText(getContext(), "Inserisci destinazione", Toast.LENGTH_SHORT).show();
                     return;
                 }
                 //controllo sulla targa
-                if(TextUtils.isEmpty(textTarga)) {
+                if (TextUtils.isEmpty(textTarga)) {
                     Toast.makeText(getContext(), "Inserisci targa, clicca su Veicolo", Toast.LENGTH_SHORT).show();
                     return;
                 }
 
-                if(date.get("day").equals(-1) || date.get("month").equals(-1) || date.get("year").equals(-1)) {
+                if (date.get("day").equals(-1) || date.get("month").equals(-1) || date.get("year").equals(-1)) {
                     Toast.makeText(getContext(), "Inserisci data", Toast.LENGTH_SHORT).show();
                     return;
                 }
 
-                if(time.get("hour").equals(-1) || time.get("minute").equals(-1)) {
+                if (time.get("hour").equals(-1) || time.get("minute").equals(-1)) {
                     Toast.makeText(getContext(), "Inserisci orario", Toast.LENGTH_SHORT).show();
                     return;
                 }
 
-                //carica il nuovo passaggio nel db di realtime
-                String rideId = myRef.push().getKey();  //crea la chiave del nuovo passaggio
+                //prende i dati dell'utente
+                myRef.addValueEventListener(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(DataSnapshot dataSnapshot) {
+                        if (dataSnapshot.exists()) {
+                            utente[0] = dataSnapshot.getValue(Utente.class);
+                            //crea un nuovo passaggio
+                            loadNewRide(selectedSourceOption, selectedDestinationOption
+                                    , utente[0]);
+                        }
+                    }
 
-                ArrayList<Utente> utenti = new ArrayList<>();
-                utenti.add(new Utente(currentUser.getEmail(),"","","",""));
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError error) {
 
-                Ride ride = new Ride(rideId,currentUser.getEmail().substring(0, currentUser.getEmail().indexOf("@")),
-                        selectedSourceOption,selectedDestinationOption,
-                        LocalDate.of(date.get("year"),date.get("month") + 1,date.get("day")).toString(),
-                        LocalTime.of(time.get("hour"),time.get("minute"),0).toString(),
-                        textTarga,textDettagli,numPosti,utenti);
-
-                myRef.child(rideId).setValue(ride)
-                        .addOnCompleteListener(new OnCompleteListener<Void>() {
-                                    @Override
-                                    public void onComplete(@NonNull Task<Void> task) {
-                                        if (task.isSuccessful()) {
-                                            // L'operazione di scrittura è stata completata con successo
-                                            // Esegui qui le azioni desiderate in caso di successo
-                                            Toast.makeText(getContext(), "Passaggio creato", Toast.LENGTH_LONG).show();
-
-                                        } else {
-                                            // Si è verificato un errore durante l'operazione di scrittura
-                                            // Esegui qui le azioni desiderate in caso di errore
-                                            Toast.makeText(getContext(), "Errore nella creazione del passaggio", Toast.LENGTH_LONG).show();
-
-                                        }
-                                    }
-                                }
-                        );
+                    }
+                });
 
             }
         });
@@ -221,26 +214,39 @@ public class OfferRideFragment extends Fragment {
         return rootView;
     }
 
+    private void loadNewRide(String selectedSourceOption, String selectedDestinationOption, Utente guidatore) {
+        //carica il nuovo passaggio nel db di realtime
+        myRef = FirebaseDatabase.getInstance().getReference("passaggi");
+        String rideId = myRef.push().getKey();  //crea la chiave del nuovo passaggio
+
+        ArrayList<Utente> utenti = new ArrayList<>();
+        utenti.add(guidatore);
+
+        Ride ride = new Ride(rideId, guidatore.getNome() + " " + guidatore.getCognome(), selectedSourceOption, selectedDestinationOption, LocalDate.of(date.get("year"), date.get("month") + 1, date.get("day")).toString(), LocalTime.of(time.get("hour"), time.get("minute"), 0).toString(), textTarga, textDettagli, numPosti, utenti);
+
+        myRef.child(rideId).setValue(ride).addOnCompleteListener(new OnCompleteListener<Void>() {
+            @Override
+            public void onComplete(@NonNull Task<Void> task) {
+                if (task.isSuccessful()) {
+                    // L'operazione di scrittura è stata completata con successo
+                    Toast.makeText(getContext(), "Passaggio creato", Toast.LENGTH_LONG).show();
+                } else {
+                    // Si è verificato un errore durante l'operazione di scrittura
+                    Toast.makeText(getContext(), "Errore nella creazione del passaggio", Toast.LENGTH_LONG).show();
+                }
+            }
+        });
+
+    }
+
     // Mostra il DatePicker
-    private void showDatePicker(Integer day,Integer month, Integer year) {
-        DatePickerDialog datePickerDialog = new DatePickerDialog(
-                requireContext(),
-                dateSetListener,
-                year,
-                month,
-                day
-        );
+    private void showDatePicker(Integer day, Integer month, Integer year) {
+        DatePickerDialog datePickerDialog = new DatePickerDialog(requireContext(), dateSetListener, year, month, day);
         datePickerDialog.show();
     }
 
     private void showTimePicker(Integer hour, Integer minute) {
-        TimePickerDialog timePickerDialog = new TimePickerDialog(
-                requireContext(),
-                timeSetListener,
-                hour,
-                minute,
-                true
-        );
+        TimePickerDialog timePickerDialog = new TimePickerDialog(requireContext(), timeSetListener, hour, minute, true);
         timePickerDialog.show();
     }
 
@@ -255,15 +261,12 @@ public class OfferRideFragment extends Fragment {
         dettagliEditText.setText(textDettagli);
         postiEditText.setText(numPosti);
 
-        new MaterialAlertDialogBuilder(getContext())
-                .setTitle("Dati veicolo")
-                .setView(dialogView)
-                .setPositiveButton("GOT IT", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialogInterface, int i) {
-                        textTarga = targaEditText.getText().toString();
-                        textDettagli = dettagliEditText.getText().toString();
-                        numPosti = postiEditText.getText().toString();
+        new MaterialAlertDialogBuilder(getContext()).setTitle("Dati veicolo").setView(dialogView).setPositiveButton("GOT IT", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                textTarga = targaEditText.getText().toString();
+                textDettagli = dettagliEditText.getText().toString();
+                numPosti = postiEditText.getText().toString();
 
                         /*
                         Era codice per il colore della text view, da rivedere
@@ -273,22 +276,19 @@ public class OfferRideFragment extends Fragment {
                         else fieldFilled[0] = false;
                             setFieldColor();
                         */
-                    }
-                })
-                .setNegativeButton("CANCEL", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialogInterface, int i) {
+            }
+        }).setNegativeButton("CANCEL", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
 
-                    }
-                })
-                .show();
+            }
+        }).show();
     }
 
     //da rivedere
     private void setFieldColor() {
         TextView textViewVeicolo = rootView.findViewById(R.id.textView_veicolo);
-        if(!fieldFilled[0])
-            textViewVeicolo.setTextColor(Color.RED);
+        if (!fieldFilled[0]) textViewVeicolo.setTextColor(Color.RED);
         else textViewVeicolo.setTextColor(Color.GREEN);
     }
 
