@@ -8,7 +8,7 @@ import java.util.List;
 
 public class Ride {
 
-    private String guidatore;
+    private Utente guidatore;
     private String sorgente;
     private String destinazione;
     private String data;
@@ -21,7 +21,7 @@ public class Ride {
 
     public Ride() {}
 
-    public Ride(String id, String guidatore, String sorgente, String destinazione, String data, String orario, String targa, String dettagliVeicolo, String posti, List<Utente> utenti) {
+    public Ride(String id, Utente guidatore, String sorgente, String destinazione, String data, String orario, String targa, String dettagliVeicolo, String posti, List<Utente> utenti) {
         this.id = id;
         this.guidatore = guidatore;
         this.sorgente = sorgente;
@@ -35,11 +35,11 @@ public class Ride {
     }
 
 
-    public String getGuidatore() {
+    public Utente getGuidatore() {
         return guidatore;
     }
 
-    public void setGuidatore(String guidatore) {
+    public void setGuidatore(Utente guidatore) {
         this.guidatore = guidatore;
     }
 

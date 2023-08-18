@@ -223,7 +223,7 @@ public class OfferRideFragment extends Fragment {
         ArrayList<Utente> utenti = new ArrayList<>();
         utenti.add(guidatore);
 
-        Ride ride = new Ride(rideId, guidatore.getNome() + " " + guidatore.getCognome(), selectedSourceOption, selectedDestinationOption, LocalDate.of(date.get("year"), date.get("month") + 1, date.get("day")).toString(), LocalTime.of(time.get("hour"), time.get("minute"), 0).toString(), textTarga, textDettagli, numPosti, utenti);
+        Ride ride = new Ride(rideId, guidatore, selectedSourceOption, selectedDestinationOption, LocalDate.of(date.get("year"), date.get("month") + 1, date.get("day")).toString(), LocalTime.of(time.get("hour"), time.get("minute"), 0).toString(), textTarga, textDettagli, numPosti, utenti);
 
         myRef.child(rideId).setValue(ride).addOnCompleteListener(new OnCompleteListener<Void>() {
             @Override

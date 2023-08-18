@@ -29,6 +29,10 @@ import org.osmdroid.views.overlay.Marker;
 import org.osmdroid.views.overlay.ItemizedIconOverlay;
 import org.osmdroid.views.overlay.ItemizedOverlayWithFocus;
 import org.osmdroid.views.overlay.OverlayItem;
+
+import java.time.LocalDate;
+import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
 import java.util.*;
 
 public class ListRideFragment extends Fragment {
@@ -75,18 +79,9 @@ public class ListRideFragment extends Fragment {
                 for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
 
                     Ride ride = snapshot.getValue(Ride.class);
-                    //controlli
-                    boolean isPasseggero = false;
-                    if(ride.getGuidatore().equals(userId))
-                        continue;
-                    for(Utente u: ride.getUtenti()){
-                        if(u.getEmail().substring(0,u.getEmail().indexOf("@")).equals(userId)){
-                            isPasseggero = true;
-                            break;
-                        }
-                    }
-                    if(!isPasseggero)
+                    if(checkRide(ride,userId,args))
                         passaggiList.add(ride);
+
                 }
                 adapter.notifyDataSetChanged();
             }
@@ -97,8 +92,42 @@ public class ListRideFragment extends Fragment {
 
         });
 
-
         return rootView;
+    }
+
+    private boolean checkRide(Ride ride,String userId, Bundle args) {
+        //controllo sull'essere il guidatore
+        if(ride.getGuidatore().getEmail().substring(0,ride.getGuidatore().getEmail().indexOf("@")).equals(userId))
+            return false;
+
+        //controllo sulla correttezza della data
+        DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+        LocalDate inputDate = LocalDate.parse(args.getString("date"),dateFormatter);
+        LocalDate rideDate = LocalDate.parse(ride.getData());
+        if(inputDate.compareTo(rideDate) != 0)
+            return false;
+
+        //controllo sulla correttezza della fascia oraria
+        LocalTime startTime = LocalTime.parse(args.getString("timeStart"));
+        LocalTime endTime = LocalTime.parse(args.getString("timeEnd"));
+        LocalTime rideTime = LocalTime.parse(ride.getOrario());
+        if(startTime.compareTo(rideTime) > 0 || endTime.compareTo(rideTime) < 0)
+            return false;
+
+        //controllo sulla correttezza di sorgente e destinazione
+        if(!args.getString("source").equals(ride.getSorgente()) || !args.getString("destination").equals(ride.getDestinazione()))
+            return false;
+
+        //controllo sull'essere passeggero
+
+        for(Utente u: ride.getUtenti()){
+            if(u.getEmail().substring(0,u.getEmail().indexOf("@")).equals(userId)){
+                return false;
+            }
+        }
+
+
+        return true;
     }
 }
 

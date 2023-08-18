@@ -64,7 +64,7 @@ public class RideAdapter extends RecyclerView.Adapter<RideAdapter.RideViewHolder
         public void bind(Ride passaggio) {
 
             seatsTextView.setText("Posti disponibili: " + String.valueOf(passaggio.getPosti()));
-            driverTextView.setText("Guidatore: " + passaggio.getGuidatore());
+            driverTextView.setText("Guidatore: " + passaggio.getGuidatore().getNome() + " " + passaggio.getGuidatore().getCognome());
             timeTextView.setText("Ora di partenza: " + passaggio.getOrario());
             prenotaBtn.setOnClickListener(new View.OnClickListener() {
                 @Override
