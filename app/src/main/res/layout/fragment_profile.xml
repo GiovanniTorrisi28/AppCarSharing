@@ -84,8 +84,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@drawable/rounded_border"
-            android:text="Update profile"
-            android:id="@+id/profle_update_btn"/>
+            android:text="I miei passaggi"
+            android:id="@+id/myRide_btn"/>
 
     </LinearLayout>
 
