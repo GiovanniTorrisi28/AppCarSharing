@@ -37,7 +37,7 @@
         android:layout_rowWeight="1"
         android:layout_columnWeight="1"
         android:layout_gravity="center"
-        android:text="Prenota" />
+        android:text="Info" />
 
     <Button
         android:id="@+id/cancellaButton"
