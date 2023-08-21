@@ -56,20 +56,20 @@ public class MyRideAdapter extends RecyclerView.Adapter<MyRideAdapter.RideViewHo
 
     public class RideViewHolder extends RecyclerView.ViewHolder {
 
-        private TextView driverTextView;
+        private TextView  guidatoreTextView,postiTextView;
         private Button cancellaBtn, infoBtn;
 
         public RideViewHolder(@NonNull View itemView) {
             super(itemView);
-
-            driverTextView = itemView.findViewById(R.id.guidatore_text_view);
+            postiTextView = itemView.findViewById(R.id.posti_text_view);
+            guidatoreTextView = itemView.findViewById(R.id.guidatore_text_view);
             cancellaBtn = itemView.findViewById(R.id.cancellaButton);
             infoBtn = itemView.findViewById(R.id.infoButton);
         }
 
         public void bind(Ride passaggio) {
-
-            driverTextView.setText("Guidatore: " + passaggio.getGuidatore().getNome() + " " + passaggio.getGuidatore().getCognome());
+            postiTextView.setText("Posti disponibili: " + passaggio.getPosti());
+            guidatoreTextView.setText("Guidatore: " + passaggio.getGuidatore().getNome() + " " + passaggio.getGuidatore().getCognome());
 
             //pulsante info
             infoBtn.setOnClickListener(new View.OnClickListener() {
