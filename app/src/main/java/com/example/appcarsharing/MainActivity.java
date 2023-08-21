@@ -19,6 +19,7 @@ public class MainActivity extends AppCompatActivity {
     SettingsFragment settingsFragment = new SettingsFragment();
     NotificationFragment notificationFragment = new NotificationFragment();
     PofFragment pofFragment = new PofFragment();
+    ProfileFragment profileFragment = new ProfileFragment();
     TestFragment testFragment = new TestFragment();
 
     @Override
@@ -55,8 +56,8 @@ public class MainActivity extends AppCompatActivity {
                     getSupportFragmentManager().beginTransaction().replace(R.id.container,pofFragment).commit();
                     return true;
                 }
-                else if (item.getItemId() == R.id.test){
-                    getSupportFragmentManager().beginTransaction().replace(R.id.container,testFragment).commit();
+                else if (item.getItemId() == R.id.profile){
+                    getSupportFragmentManager().beginTransaction().replace(R.id.container,profileFragment).commit();
                     return true;
                 }
                 return false;
