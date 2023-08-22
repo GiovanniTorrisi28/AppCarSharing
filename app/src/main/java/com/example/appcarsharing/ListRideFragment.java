@@ -119,7 +119,6 @@ public class ListRideFragment extends Fragment {
             return false;
 
         //controllo sull'essere passeggero
-
         for(Utente u: ride.getUtenti()){
             if(u.getEmail().substring(0,u.getEmail().indexOf("@")).equals(userId)){
                 return false;

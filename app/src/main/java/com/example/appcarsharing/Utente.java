@@ -1,5 +1,7 @@
 package com.example.appcarsharing;
 
+import androidx.annotation.Nullable;
+
 public class Utente {
     private String email;
     private String password;
@@ -13,6 +15,10 @@ public class Utente {
         this.nome = nome;
         this.cognome = cognome;
         this.telefono = telefono;
+    }
+
+    public Utente(String email) {
+        this.email = email;
     }
 
     public Utente(){}
@@ -57,6 +63,15 @@ public class Utente {
         this.telefono = telefono;
     }
 
+    public String getKey() {
+        return this.email.substring(0,this.email.indexOf("@"));
+    }
+
+    @Override
+    public boolean equals(@Nullable Object obj) {
+        Utente compareUser = (Utente) obj;
+        return this.getEmail().equals(compareUser.getEmail());
+    }
 
     public String toString(){
         return nome + " " + cognome + " " + email + " " + password;

@@ -2,6 +2,7 @@ package com.example.appcarsharing;
 
 import android.content.Context;
 import android.content.DialogInterface;
+import android.provider.ContactsContract;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,16 +11,21 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+
+import org.w3c.dom.Text;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -29,10 +35,12 @@ import java.util.Map;
 public class MyRideAdapter extends RecyclerView.Adapter<MyRideAdapter.RideViewHolder> {
 
     private List<Ride> passaggiList;
-    Context context;
+    private Context context;
+    private FirebaseUser user;
 
     public MyRideAdapter(List<Ride> passaggiList) {
         this.passaggiList = passaggiList;
+        this.user = FirebaseAuth.getInstance().getCurrentUser();
     }
 
     @NonNull
@@ -56,7 +64,7 @@ public class MyRideAdapter extends RecyclerView.Adapter<MyRideAdapter.RideViewHo
 
     public class RideViewHolder extends RecyclerView.ViewHolder {
 
-        private TextView  guidatoreTextView,postiTextView;
+        private TextView guidatoreTextView, postiTextView;
         private Button cancellaBtn, infoBtn;
 
         public RideViewHolder(@NonNull View itemView) {
@@ -75,7 +83,7 @@ public class MyRideAdapter extends RecyclerView.Adapter<MyRideAdapter.RideViewHo
             infoBtn.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    showDialog(passaggio);
+                    showInfoDialog(passaggio);
                 }
             });
 
@@ -83,32 +91,66 @@ public class MyRideAdapter extends RecyclerView.Adapter<MyRideAdapter.RideViewHo
             cancellaBtn.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    //prendi i dati dell'utente
-                    String email = FirebaseAuth.getInstance().getCurrentUser().getEmail();
-                    String id = email.substring(0, email.indexOf("@"));
-                    DatabaseReference myRef = FirebaseDatabase.getInstance().getReference("Utenti").child(id);
-                    final Utente[] utente = {new Utente()};
-                    myRef.addValueEventListener(new ValueEventListener() {
-                        @Override
-                        public void onDataChange(DataSnapshot dataSnapshot) {
-                            if (dataSnapshot.exists()) {
-                                utente[0] = dataSnapshot.getValue(Utente.class);
-                                //carica l'utente nella lista dei passeggeri
 
-                            }
+                    //se il guidatore è l'utente loggato
+                    if (user.getEmail().substring(0, user.getEmail().indexOf("@")).equals(passaggio.getGuidatore().getKey())) {
+                        showCancellaDialog(passaggio);
+                    }
+                    //è un passeggero
+                    else {
+                        aggiornaPassaggio(passaggio);
+                    }
+
+                }
+            });
+
+        }
+
+        private void showCancellaDialog(Ride passaggio){
+            new MaterialAlertDialogBuilder(context).setTitle("Cancella Passaggio")
+                    .setMessage("Sei il guidatore e ci sono passeggeri, sei sicuro di voler cancellare il passaggio ?")
+                    .setPositiveButton("Cancella", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialogInterface, int i) {
+                            cancellaPassaggio(passaggio);
                         }
-
+                    }).setNegativeButton("Annulla", new DialogInterface.OnClickListener() {
                         @Override
-                        public void onCancelled(DatabaseError databaseError) {
-                            System.out.println("errore nella lettura dell'utente da firebase, in ride adapter");
+                        public void onClick(DialogInterface dialogInterface, int i) {
+
+                        }
+                    }).show();
+        }
+
+        private void cancellaPassaggio(Ride passaggio) {
+            DatabaseReference myRef = FirebaseDatabase.getInstance().getReference().child("passaggi").child(passaggio.getId());
+            myRef.removeValue()
+                    .addOnSuccessListener(new OnSuccessListener<Void>() {
+                        @Override
+                        public void onSuccess(Void aVoid) {
+                            Toast.makeText(context, "Passaggio eliminato", Toast.LENGTH_LONG);
                         }
                     });
+        }
 
+        private void aggiornaPassaggio(Ride passaggio) {
+            DatabaseReference myRef = FirebaseDatabase.getInstance().getReference().child("passaggi").child(passaggio.getId());
+            Map<String,Object> updates = new HashMap<>();
+            passaggio.getUtenti().remove(new Utente(user.getEmail()));
+            passaggio.getUtenti();
+            updates.put("utenti",passaggio.getUtenti());
+            updates.put("posti",String.valueOf(Integer.parseInt(passaggio.getPosti()) + 1));
+            myRef.updateChildren(updates, new DatabaseReference.CompletionListener() {
+                @Override
+                public void onComplete(@Nullable DatabaseError error, @NonNull DatabaseReference ref) {
+                    if(error == null)
+                        Toast.makeText(context,"Prenotazione cancellata",Toast.LENGTH_LONG);
+                    else Toast.makeText(context,"Errore nella cancellazione della prenotazione",Toast.LENGTH_LONG);
                 }
             });
         }
 
-        private void showDialog(Ride passaggio) {
+        private void showInfoDialog(Ride passaggio) {
             View dialogView = LayoutInflater.from(context).inflate(R.layout.my_ride_dialog, null);
 
             TextView sorgenteTextView = dialogView.findViewById(R.id.sorgente_textView);
@@ -117,6 +159,7 @@ public class MyRideAdapter extends RecyclerView.Adapter<MyRideAdapter.RideViewHo
             TextView oraTextView = dialogView.findViewById(R.id.ora_textView);
             TextView targaTextView = dialogView.findViewById(R.id.targa_textView);
             TextView dettagliTextView = dialogView.findViewById(R.id.dettagli_textView);
+            TextView passeggeriTextView = dialogView.findViewById(R.id.passeggeri_textView);
 
             sorgenteTextView.setText(passaggio.getSorgente());
             destinazioneTextView.setText(passaggio.getDestinazione());
@@ -125,6 +168,11 @@ public class MyRideAdapter extends RecyclerView.Adapter<MyRideAdapter.RideViewHo
             targaTextView.setText(passaggio.getTarga());
             dettagliTextView.setText(passaggio.getDettagliVeicolo());
 
+            String passeggeri = "";
+            for(int i = 1; i < passaggio.getUtenti().size(); i++)
+                passeggeri += passaggio.getUtenti().get(i).getNome() + " " + passaggio.getUtenti().get(i).getNome() + ", ";
+
+            passeggeriTextView.setText(passeggeri);
             new MaterialAlertDialogBuilder(context).setTitle("Info passaggio").setView(dialogView).setPositiveButton("GOT IT", new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialogInterface, int i) {

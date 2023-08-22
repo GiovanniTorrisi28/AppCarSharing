@@ -11,6 +11,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -71,7 +72,8 @@ public class MyRideFragment extends Fragment {
                 for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
 
                     Ride ride = snapshot.getValue(Ride.class);
-                        passaggiList.add(ride);
+                    if(checkRide(ride))
+                       passaggiList.add(ride);
 
                 }
                 adapter.notifyDataSetChanged();
@@ -83,5 +85,21 @@ public class MyRideFragment extends Fragment {
 
         });
         return rootView;
+    }
+
+    private boolean checkRide(Ride ride) {
+        String email = FirebaseAuth.getInstance().getCurrentUser().getEmail();
+        String userKey = email.substring(0, email.indexOf("@"));
+
+        if(ride.getGuidatore().getEmail().substring(0,ride.getGuidatore().getEmail().indexOf("@")).equals(userKey))
+            return true;
+
+        for(Utente u: ride.getUtenti()){
+            if(u.getKey().equals(userKey)){
+                return true;
+            }
+        }
+
+        return false;
     }
 }
