@@ -56,48 +56,6 @@
             android:layout_height="wrap_content"
             android:gravity="end"
             android:paddingEnd="8dp"
-            android:text="Data: "
-            android:textAppearance="?android:textAppearanceMedium" />
-
-        <TextView
-            android:id="@+id/data_textView"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1" />
-
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal">
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:gravity="end"
-            android:paddingEnd="8dp"
-            android:text="Ora: "
-            android:textAppearance="?android:textAppearanceMedium" />
-
-        <TextView
-            android:id="@+id/ora_textView"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1" />
-
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal">
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:gravity="end"
-            android:paddingEnd="8dp"
             android:text="Targa: "
             android:textAppearance="?android:textAppearanceMedium" />
 

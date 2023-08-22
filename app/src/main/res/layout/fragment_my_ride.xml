@@ -1,9 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".MyRideFragment">
+    android:orientation="vertical">
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:text="I tuoi passaggi"
+        android:textSize="25sp"
+        android:textStyle="bold"
+        android:layout_marginTop="5dp"/>
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recycler_view"
@@ -11,4 +20,4 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp" />
 
-</FrameLayout>
+</LinearLayout>

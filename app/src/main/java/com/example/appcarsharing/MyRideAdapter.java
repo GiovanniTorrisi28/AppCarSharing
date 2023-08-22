@@ -64,20 +64,25 @@ public class MyRideAdapter extends RecyclerView.Adapter<MyRideAdapter.RideViewHo
 
     public class RideViewHolder extends RecyclerView.ViewHolder {
 
-        private TextView guidatoreTextView, postiTextView;
+        private TextView guidatoreTextView, dataOraTextView;
         private Button cancellaBtn, infoBtn;
 
         public RideViewHolder(@NonNull View itemView) {
             super(itemView);
-            postiTextView = itemView.findViewById(R.id.posti_text_view);
+            dataOraTextView = itemView.findViewById(R.id.data_ora_text_view);
             guidatoreTextView = itemView.findViewById(R.id.guidatore_text_view);
             cancellaBtn = itemView.findViewById(R.id.cancellaButton);
             infoBtn = itemView.findViewById(R.id.infoButton);
         }
 
         public void bind(Ride passaggio) {
-            postiTextView.setText("Posti disponibili: " + passaggio.getPosti());
-            guidatoreTextView.setText("Guidatore: " + passaggio.getGuidatore().getNome() + " " + passaggio.getGuidatore().getCognome());
+
+            dataOraTextView.setText(passaggio.getData() + " - " + passaggio.getOrario());
+
+            if(passaggio.getGuidatore().getEmail().equals(user.getEmail()))
+               guidatoreTextView.setText("Tu");
+            else
+                guidatoreTextView.setText(passaggio.getGuidatore().getNome() + " " + passaggio.getGuidatore().getCognome());
 
             //pulsante info
             infoBtn.setOnClickListener(new View.OnClickListener() {
@@ -93,14 +98,11 @@ public class MyRideAdapter extends RecyclerView.Adapter<MyRideAdapter.RideViewHo
                 public void onClick(View v) {
 
                     //se il guidatore è l'utente loggato
-                    if (user.getEmail().substring(0, user.getEmail().indexOf("@")).equals(passaggio.getGuidatore().getKey())) {
+                    if (user.getEmail().substring(0, user.getEmail().indexOf("@")).equals(passaggio.getGuidatore().getKey()))
                         showCancellaDialog(passaggio);
-                    }
                     //è un passeggero
-                    else {
+                    else
                         aggiornaPassaggio(passaggio);
-                    }
-
                 }
             });
 
@@ -155,16 +157,12 @@ public class MyRideAdapter extends RecyclerView.Adapter<MyRideAdapter.RideViewHo
 
             TextView sorgenteTextView = dialogView.findViewById(R.id.sorgente_textView);
             TextView destinazioneTextView = dialogView.findViewById(R.id.destinazione_textView);
-            TextView dataTextView = dialogView.findViewById(R.id.data_textView);
-            TextView oraTextView = dialogView.findViewById(R.id.ora_textView);
             TextView targaTextView = dialogView.findViewById(R.id.targa_textView);
             TextView dettagliTextView = dialogView.findViewById(R.id.dettagli_textView);
             TextView passeggeriTextView = dialogView.findViewById(R.id.passeggeri_textView);
 
             sorgenteTextView.setText(passaggio.getSorgente());
             destinazioneTextView.setText(passaggio.getDestinazione());
-            dataTextView.setText(passaggio.getData());
-            oraTextView.setText(passaggio.getOrario());
             targaTextView.setText(passaggio.getTarga());
             dettagliTextView.setText(passaggio.getDettagliVeicolo());
 
@@ -173,18 +171,12 @@ public class MyRideAdapter extends RecyclerView.Adapter<MyRideAdapter.RideViewHo
                 passeggeri += passaggio.getUtenti().get(i).getNome() + " " + passaggio.getUtenti().get(i).getNome() + ", ";
 
             passeggeriTextView.setText(passeggeri);
-            new MaterialAlertDialogBuilder(context).setTitle("Info passaggio").setView(dialogView).setPositiveButton("GOT IT", new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialogInterface, int i) {
-
-                }
-            }).setNegativeButton("CANCEL", new DialogInterface.OnClickListener() {
+            new MaterialAlertDialogBuilder(context).setTitle("Info passaggio").setView(dialogView).setPositiveButton("OK", new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialogInterface, int i) {
 
                 }
             }).show();
-
         }
 
 
