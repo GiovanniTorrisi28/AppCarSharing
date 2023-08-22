@@ -110,7 +110,7 @@ public class MyRideAdapter extends RecyclerView.Adapter<MyRideAdapter.RideViewHo
 
         private void showCancellaDialog(Ride passaggio){
             new MaterialAlertDialogBuilder(context).setTitle("Cancella Passaggio")
-                    .setMessage("Sei il guidatore e ci sono passeggeri, sei sicuro di voler cancellare il passaggio ?")
+                    .setMessage("Sei il guidatore di questo passaggio e ci sono passeggeri, sei sicuro di volerlo cancellare ?")
                     .setPositiveButton("Cancella", new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialogInterface, int i) {
