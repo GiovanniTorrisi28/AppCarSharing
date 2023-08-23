@@ -66,28 +66,6 @@ public class NotificationAdapter extends RecyclerView.Adapter<NotificationAdapte
              messaggioTextView.setText(notifica.getMessaggio());
         }
 
-        public void loadData(Ride passaggio, Utente utente, View v) {
-            List<Utente> passeggeri = passaggio.getUtenti();
-            passeggeri.add(utente);
-            passaggio.setUtenti(passeggeri);
-            //aggiornare i dati su firebase
-            DatabaseReference myRef = FirebaseDatabase.getInstance().getReference("passaggi");
-            Map<String,Object> updates = new HashMap<>();
-            updates.put("utenti",passeggeri);
-            updates.put("posti",String.valueOf(Integer.parseInt(passaggio.getPosti()) - 1));
-            myRef.child(passaggio.getId()).updateChildren(updates, new DatabaseReference.CompletionListener() {
-                @Override
-                public void onComplete(DatabaseError databaseError, DatabaseReference databaseReference) {
-                    if (databaseError == null) {
-                        Toast.makeText(v.getContext(), "Passaggio prenotato", Toast.LENGTH_LONG).show();
-                    } else {
-                        Toast.makeText(v.getContext(), "Errore nella prenotazione del passaggio", Toast.LENGTH_LONG).show();
-                    }
-                }
-            });
-        }
-
-
     }
 
 }

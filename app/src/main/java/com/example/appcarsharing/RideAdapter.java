@@ -1,5 +1,10 @@
 package com.example.appcarsharing;
 
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
+import android.content.Context;
+import android.content.pm.PackageManager;
+import android.os.Build;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -8,6 +13,9 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.core.app.ActivityCompat;
+import androidx.core.app.NotificationCompat;
+import androidx.core.app.NotificationManagerCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -27,6 +35,7 @@ import java.util.Map;
 public class RideAdapter extends RecyclerView.Adapter<RideAdapter.RideViewHolder> {
 
     private List<Ride> passaggiList;
+    private Context context;
 
     public RideAdapter(List<Ride> passaggiList) {
         this.passaggiList = passaggiList;
@@ -36,6 +45,7 @@ public class RideAdapter extends RecyclerView.Adapter<RideAdapter.RideViewHolder
     @Override
     public RideViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View itemView = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_passaggio, parent, false);
+        this.context = parent.getContext();
         return new RideViewHolder(itemView);
     }
 
@@ -110,14 +120,17 @@ public class RideAdapter extends RecyclerView.Adapter<RideAdapter.RideViewHolder
                 public void onComplete(DatabaseError databaseError, DatabaseReference databaseReference) {
                     if (databaseError == null) {
                         Toast.makeText(v.getContext(), "Passaggio prenotato", Toast.LENGTH_LONG).show();
+                        caricaNotifica(passaggio, utente);
                     } else {
                         Toast.makeText(v.getContext(), "Errore nella prenotazione del passaggio", Toast.LENGTH_LONG).show();
                     }
                 }
             });
+        }
 
-            //carica la notifica
-            myRef = FirebaseDatabase.getInstance().getReference("notifiche");
+        //carica la notifica
+        private void caricaNotifica(Ride passaggio, Utente utente) {
+            DatabaseReference myRef = FirebaseDatabase.getInstance().getReference("notifiche");
             String notificaId = myRef.push().getKey();
             myRef.child(passaggio.getGuidatore().getKey()).child(notificaId).
                     setValue(new Notification(utente.getNome() + " " + utente.getCognome(),
@@ -126,8 +139,7 @@ public class RideAdapter extends RecyclerView.Adapter<RideAdapter.RideViewHolder
                         @Override
                         public void onComplete(@NonNull Task<Void> task) {
                             if (task.isSuccessful()) {
-                                //sostituire con notifica vera
-                                Toast.makeText(v.getContext(), "Notifica", Toast.LENGTH_LONG).show();
+                                
                             } else {
                                 System.out.println("errore nel caricamneto della notifica");
                             }
@@ -135,6 +147,17 @@ public class RideAdapter extends RecyclerView.Adapter<RideAdapter.RideViewHolder
                     });
         }
 
+        private void createNotificationChannel() {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                CharSequence name = "My Channel";
+                String description = "My notification channel";
+                int importance = NotificationManager.IMPORTANCE_DEFAULT;
+                NotificationChannel channel = new NotificationChannel("CHANNEL_ID", name, importance);
+                channel.setDescription(description);
+                NotificationManager notificationManager = context.getSystemService(NotificationManager.class);
+                notificationManager.createNotificationChannel(channel);
+            }
+        }
 
     }
 }

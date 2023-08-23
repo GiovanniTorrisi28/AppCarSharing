@@ -1,9 +1,12 @@
 package com.example.appcarsharing;
 
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.core.app.NotificationCompat;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -30,6 +33,8 @@ public class NotificationFragment extends Fragment {
     private NotificationAdapter adapter;
     private List<Notification> notificheList;
     private FirebaseUser user;
+
+    private boolean isFirstRead = true;
 
     public NotificationFragment(){
         this.user = FirebaseAuth.getInstance().getCurrentUser();
@@ -65,6 +70,13 @@ public class NotificationFragment extends Fragment {
                 }
 
                 adapter.notifyDataSetChanged();
+
+                if (isFirstRead) {
+                    isFirstRead = false;
+                    return;
+                }
+
+                lanciaNotifica();
             }
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
@@ -75,6 +87,26 @@ public class NotificationFragment extends Fragment {
 
 
         return rootView;
+    }
+
+    private void lanciaNotifica(){
+        NotificationManager notificationManager = getContext().getSystemService(NotificationManager.class);
+        String CHANNEL_ID="my_channel_id";
+        String channel_name="channel_name";
+        String channel_description="channel_description";
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
+            NotificationChannel channel = new NotificationChannel(CHANNEL_ID,
+                    channel_name,
+                    NotificationManager.IMPORTANCE_DEFAULT);
+            channel.setDescription(channel_description);
+            notificationManager.createNotificationChannel(channel);
+        }
+        NotificationCompat.Builder builder = new NotificationCompat.Builder(getContext(), CHANNEL_ID)
+                .setSmallIcon(android.R.drawable.star_on)
+                .setContentTitle("Nuova notifica!")
+                //.setContentText("Sappi che è successo questo nel tuo sistema: ...")
+                .setPriority(NotificationCompat.PRIORITY_DEFAULT);
+        notificationManager.notify(0, builder.build());
     }
 
 }
