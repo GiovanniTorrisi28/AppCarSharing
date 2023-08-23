@@ -2,8 +2,11 @@ package com.example.appcarsharing;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.NotificationCompat;
 
 import android.annotation.SuppressLint;
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
 import android.os.Bundle;
 import android.view.MenuItem;
 
@@ -17,7 +20,7 @@ public class MainActivity extends AppCompatActivity {
 
     HomeFragment homeFragment = new HomeFragment();
     SettingsFragment settingsFragment = new SettingsFragment();
-    NotificationFragment notificationFragment = new NotificationFragment();
+    NotificationFragment notificationFragment = new NotificationFragment(this);
     PofFragment pofFragment = new PofFragment();
     ProfileFragment profileFragment = new ProfileFragment();
     TestFragment testFragment = new TestFragment();
@@ -65,4 +68,6 @@ public class MainActivity extends AppCompatActivity {
         });
 
     }
+
+
 }

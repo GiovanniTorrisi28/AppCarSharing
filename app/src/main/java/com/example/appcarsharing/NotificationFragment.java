@@ -2,6 +2,7 @@ package com.example.appcarsharing;
 
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
+import android.content.Context;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -34,10 +35,20 @@ public class NotificationFragment extends Fragment {
     private List<Notification> notificheList;
     private FirebaseUser user;
 
-    private static boolean isFirstRead = true;
+    private boolean isFirstRead = true;
+    private DataSnapshot currentsnapshot;
+    private Context appContext;
 
-    public NotificationFragment(){
+
+    public NotificationFragment(Context context){
         this.user = FirebaseAuth.getInstance().getCurrentUser();
+        this.appContext = context;
+    }
+
+    @Override
+    public void onAttach(@NonNull Context context) {
+        super.onAttach(context);
+        appContext = context.getApplicationContext();
     }
 
     @Override
@@ -45,7 +56,6 @@ public class NotificationFragment extends Fragment {
                              Bundle savedInstanceState) {
 
         View rootView = inflater.inflate(R.layout.fragment_notification, container, false);
-
         recyclerView = rootView.findViewById(R.id.recycler_view);
 
         // Inizializza e imposta il LayoutManager
@@ -73,10 +83,14 @@ public class NotificationFragment extends Fragment {
 
                 if (isFirstRead) {
                     isFirstRead = false;
+                    currentsnapshot = dataSnapshot;
                     return;
                 }
 
-                lanciaNotifica();
+                if(!currentsnapshot.getValue().equals(dataSnapshot.getValue())){
+                    currentsnapshot = dataSnapshot;
+                    lanciaNotifica();
+                }
             }
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
@@ -89,8 +103,8 @@ public class NotificationFragment extends Fragment {
         return rootView;
     }
 
-    private void lanciaNotifica(){
-        NotificationManager notificationManager = getContext().getSystemService(NotificationManager.class);
+    public void lanciaNotifica(){
+        NotificationManager notificationManager = appContext.getSystemService(NotificationManager.class);
         String CHANNEL_ID="my_channel_id";
         String channel_name="channel_name";
         String channel_description="channel_description";
@@ -101,7 +115,7 @@ public class NotificationFragment extends Fragment {
             channel.setDescription(channel_description);
             notificationManager.createNotificationChannel(channel);
         }
-        NotificationCompat.Builder builder = new NotificationCompat.Builder(getContext(), CHANNEL_ID)
+        NotificationCompat.Builder builder = new NotificationCompat.Builder(appContext, CHANNEL_ID)
                 .setSmallIcon(android.R.drawable.star_on)
                 .setContentTitle("Nuova notifica!")
                 //.setContentText("Sappi che è successo questo nel tuo sistema: ...")
