@@ -14,7 +14,9 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.firebase.auth.FirebaseAuth;
@@ -98,11 +100,15 @@ public class MyRideAdapter extends RecyclerView.Adapter<MyRideAdapter.RideViewHo
                 public void onClick(View v) {
 
                     //se il guidatore è l'utente loggato
-                    if (user.getEmail().substring(0, user.getEmail().indexOf("@")).equals(passaggio.getGuidatore().getKey()))
+                    if (user.getEmail().substring(0, user.getEmail().indexOf("@")).equals(passaggio.getGuidatore().getKey())) {
+                        caricaNotifica(passaggio.getUtenti(), getUtenteByEmail(passaggio, user.getEmail()), passaggio.getData());
                         showCancellaDialog(passaggio);
+                    }
                     //è un passeggero
-                    else
+                    else {
+                        caricaNotifica(passaggio.getGuidatore(),getUtenteByEmail(passaggio,user.getEmail()),passaggio.getData());
                         aggiornaPassaggio(passaggio);
+                    }
                 }
             });
 
@@ -152,6 +158,55 @@ public class MyRideAdapter extends RecyclerView.Adapter<MyRideAdapter.RideViewHo
             });
         }
 
+        //cosi evito la richiesta a firebase
+        private Utente getUtenteByEmail(Ride passaggio, String email){
+            for(Utente u: passaggio.getUtenti()){
+                if(u.getEmail().equals(email))
+                    return u;
+            }
+            return null;
+        }
+        private void caricaNotifica(Utente destinatario, Utente mittente, String dataPassaggio) {
+            DatabaseReference myRef = FirebaseDatabase.getInstance().getReference("notifiche");
+            String notificaId = myRef.push().getKey();
+            myRef.child(destinatario.getKey()).child(notificaId).
+                    setValue(new Notification(mittente.getNome() + " " + mittente.getCognome(),
+                            "notifica", "Cancellata la prenotazione per il tuo passaggio del " + dataPassaggio))
+                    .addOnCompleteListener(new OnCompleteListener<Void>() {
+                        @Override
+                        public void onComplete(@NonNull Task<Void> task) {
+                            if (task.isSuccessful()) {
+                                //sostituire con notifica vera
+                                System.out.println("notifica della cancellazione inviata con successo");
+                            } else {
+                                System.out.println("errore nel caricamneto della notifica");
+                            }
+                        }
+                    });
+        }
+
+        private void caricaNotifica(List<Utente> destinatari, Utente mittente, String dataPassaggio) {
+            DatabaseReference myRef = FirebaseDatabase.getInstance().getReference("notifiche");
+            String notificaId = myRef.push().getKey();
+            for(int i = 1; i < destinatari.size(); i++) {
+                myRef.child(destinatari.get(i).getKey()).child(notificaId).
+                        setValue(new Notification(mittente.getNome() + " " + mittente.getCognome(),
+                                "notifica", "Cancellato il passaggio del " + dataPassaggio))
+                        .addOnCompleteListener(new OnCompleteListener<Void>() {
+                            @Override
+                            public void onComplete(@NonNull Task<Void> task) {
+                                if (task.isSuccessful()) {
+                                    //sostituire con notifica vera
+                                    System.out.println("notifica della cancellazione passaggio inviata con successo");
+                                } else {
+                                    System.out.println("errore nel caricamneto della notifica cancellazione passaggio");
+                                }
+                            }
+                        });
+            }
+        }
+
+
         private void showInfoDialog(Ride passaggio) {
             View dialogView = LayoutInflater.from(context).inflate(R.layout.my_ride_dialog, null);
 
@@ -168,7 +223,7 @@ public class MyRideAdapter extends RecyclerView.Adapter<MyRideAdapter.RideViewHo
 
             String passeggeri = "";
             for(int i = 1; i < passaggio.getUtenti().size(); i++)
-                passeggeri += passaggio.getUtenti().get(i).getNome() + " " + passaggio.getUtenti().get(i).getNome() + ", ";
+                passeggeri += passaggio.getUtenti().get(i).getNome() + " " + passaggio.getUtenti().get(i).getCognome() + ", ";
 
             passeggeriTextView.setText(passeggeri);
             new MaterialAlertDialogBuilder(context).setTitle("Info passaggio").setView(dialogView).setPositiveButton("OK", new DialogInterface.OnClickListener() {

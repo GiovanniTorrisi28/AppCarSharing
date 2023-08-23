@@ -10,6 +10,8 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -50,7 +52,7 @@ public class RideAdapter extends RecyclerView.Adapter<RideAdapter.RideViewHolder
 
     public class RideViewHolder extends RecyclerView.ViewHolder {
 
-        private TextView seatsTextView,driverTextView,timeTextView;
+        private TextView seatsTextView, driverTextView, timeTextView;
         private Button prenotaBtn;
 
         public RideViewHolder(@NonNull View itemView) {
@@ -80,7 +82,7 @@ public class RideAdapter extends RecyclerView.Adapter<RideAdapter.RideViewHolder
                             if (dataSnapshot.exists()) {
                                 utente[0] = dataSnapshot.getValue(Utente.class);
                                 //carica l'utente nella lista dei passeggeri
-                                loadData(passaggio,utente[0],v);
+                                loadPasseggero(passaggio, utente[0], v);
                             }
                         }
 
@@ -94,15 +96,15 @@ public class RideAdapter extends RecyclerView.Adapter<RideAdapter.RideViewHolder
             });
         }
 
-        public void loadData(Ride passaggio, Utente utente, View v) {
+        public void loadPasseggero(Ride passaggio, Utente utente, View v) {
             List<Utente> passeggeri = passaggio.getUtenti();
             passeggeri.add(utente);
             passaggio.setUtenti(passeggeri);
             //aggiornare i dati su firebase
             DatabaseReference myRef = FirebaseDatabase.getInstance().getReference("passaggi");
-            Map<String,Object> updates = new HashMap<>();
-            updates.put("utenti",passeggeri);
-            updates.put("posti",String.valueOf(Integer.parseInt(passaggio.getPosti()) - 1));
+            Map<String, Object> updates = new HashMap<>();
+            updates.put("utenti", passeggeri);
+            updates.put("posti", String.valueOf(Integer.parseInt(passaggio.getPosti()) - 1));
             myRef.child(passaggio.getId()).updateChildren(updates, new DatabaseReference.CompletionListener() {
                 @Override
                 public void onComplete(DatabaseError databaseError, DatabaseReference databaseReference) {
@@ -113,6 +115,24 @@ public class RideAdapter extends RecyclerView.Adapter<RideAdapter.RideViewHolder
                     }
                 }
             });
+
+            //carica la notifica
+            myRef = FirebaseDatabase.getInstance().getReference("notifiche");
+            String notificaId = myRef.push().getKey();
+            myRef.child(passaggio.getGuidatore().getKey()).child(notificaId).
+                    setValue(new Notification(utente.getNome() + " " + utente.getCognome(),
+                            "notifica", "Nuova prenotazione per il tuo passaggio del " + passaggio.getData()))
+                    .addOnCompleteListener(new OnCompleteListener<Void>() {
+                        @Override
+                        public void onComplete(@NonNull Task<Void> task) {
+                            if (task.isSuccessful()) {
+                                //sostituire con notifica vera
+                                Toast.makeText(v.getContext(), "Notifica", Toast.LENGTH_LONG).show();
+                            } else {
+                                System.out.println("errore nel caricamneto della notifica");
+                            }
+                        }
+                    });
         }
 
 
