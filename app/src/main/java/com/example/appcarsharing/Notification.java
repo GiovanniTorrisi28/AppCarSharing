@@ -7,13 +7,15 @@ public class Notification {
     private String mittente;
     private String titolo;
     private String messaggio;
+    private String data;
 
     public Notification(){}
 
-    public Notification(String mittente, String titolo, String messaggio){
+    public Notification(String mittente, String titolo, String messaggio, String data){
         this.mittente = mittente;
         this.titolo = titolo;
         this.messaggio = messaggio;
+        this.data = data;
     }
 
     public String getMittente() {
@@ -39,5 +41,13 @@ public class Notification {
 
     public void setMessaggio(String messaggio) {
         this.messaggio = messaggio;
+    }
+
+    public String getData() {
+        return data;
+    }
+
+    public void setData(String data) {
+        this.data = data;
     }
 }

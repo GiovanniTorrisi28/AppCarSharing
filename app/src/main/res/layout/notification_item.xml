@@ -39,14 +39,14 @@
 
 
         <TextView
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:id = "@+id/textview2"
-            android:text="9999999999999999999"
             android:textSize = "12sp"
             android:layout_toRightOf = "@+id/textview"
             android:layout_marginTop="20dp"
-            android:layout_marginLeft="75dp"/>
+            android:layout_marginLeft="60dp"
+            android:text = "data"/>
 
         <TextView
             android:id="@+id/textview3"
@@ -55,7 +55,7 @@
             android:layout_below="@+id/textview"
             android:layout_marginLeft="20dp"
             android:layout_toRightOf="@+id/imageview"
-            android:text="ciao sono il messaggio"
+            android:text="messaggio"
             android:textSize="15sp" />
 
     </RelativeLayout>

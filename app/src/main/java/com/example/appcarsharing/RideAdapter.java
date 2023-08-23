@@ -27,7 +27,9 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -134,12 +136,12 @@ public class RideAdapter extends RecyclerView.Adapter<RideAdapter.RideViewHolder
             String notificaId = myRef.push().getKey();
             myRef.child(passaggio.getGuidatore().getKey()).child(notificaId).
                     setValue(new Notification(utente.getNome() + " " + utente.getCognome(),
-                            "notifica", "Nuova prenotazione per il tuo passaggio del " + passaggio.getData()))
+                            "notifica", "Nuova prenotazione per il tuo passaggio del " + passaggio.getData(), LocalDate.now().toString()))
                     .addOnCompleteListener(new OnCompleteListener<Void>() {
                         @Override
                         public void onComplete(@NonNull Task<Void> task) {
                             if (task.isSuccessful()) {
-                                
+
                             } else {
                                 System.out.println("errore nel caricamneto della notifica");
                             }

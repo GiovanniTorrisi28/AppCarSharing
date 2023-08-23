@@ -62,7 +62,7 @@ public class NotificationAdapter extends RecyclerView.Adapter<NotificationAdapte
 
         public void bind(Notification notifica) {
              mittenteTextView.setText(notifica.getMittente());
-             dataTextView.setText("ciao");
+             dataTextView.setText(notifica.getData());
              messaggioTextView.setText(notifica.getMessaggio());
         }
 

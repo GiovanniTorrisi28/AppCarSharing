@@ -34,7 +34,7 @@ public class NotificationFragment extends Fragment {
     private List<Notification> notificheList;
     private FirebaseUser user;
 
-    private boolean isFirstRead = true;
+    private static boolean isFirstRead = true;
 
     public NotificationFragment(){
         this.user = FirebaseAuth.getInstance().getCurrentUser();

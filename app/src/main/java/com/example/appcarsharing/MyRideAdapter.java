@@ -29,7 +29,9 @@ import com.google.firebase.database.ValueEventListener;
 
 import org.w3c.dom.Text;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -171,7 +173,7 @@ public class MyRideAdapter extends RecyclerView.Adapter<MyRideAdapter.RideViewHo
             String notificaId = myRef.push().getKey();
             myRef.child(destinatario.getKey()).child(notificaId).
                     setValue(new Notification(mittente.getNome() + " " + mittente.getCognome(),
-                            "notifica", "Cancellata la prenotazione per il tuo passaggio del " + dataPassaggio))
+                            "notifica", "Cancellata la prenotazione per il tuo passaggio del " + dataPassaggio,LocalDate.now().toString()))
                     .addOnCompleteListener(new OnCompleteListener<Void>() {
                         @Override
                         public void onComplete(@NonNull Task<Void> task) {
@@ -191,7 +193,7 @@ public class MyRideAdapter extends RecyclerView.Adapter<MyRideAdapter.RideViewHo
             for(int i = 1; i < destinatari.size(); i++) {
                 myRef.child(destinatari.get(i).getKey()).child(notificaId).
                         setValue(new Notification(mittente.getNome() + " " + mittente.getCognome(),
-                                "notifica", "Cancellato il passaggio del " + dataPassaggio))
+                                "notifica", "Cancellato il passaggio del " + dataPassaggio,LocalDate.now().toString()))
                         .addOnCompleteListener(new OnCompleteListener<Void>() {
                             @Override
                             public void onComplete(@NonNull Task<Void> task) {
