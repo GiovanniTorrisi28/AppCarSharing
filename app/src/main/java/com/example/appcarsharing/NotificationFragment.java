@@ -2,7 +2,9 @@ package com.example.appcarsharing;
 
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -114,11 +116,20 @@ public class NotificationFragment extends Fragment {
             channel.setDescription(channel_description);
             notificationManager.createNotificationChannel(channel);
         }
+
+        //azione da compiere al click sulla notifica
+        Intent intent = new Intent(appContext, MainActivity.class);
+        intent.putExtra("apriFragment", true); // Aggiungi un extra per indicare di aprire il fragment
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        PendingIntent pendingIntent = PendingIntent.getActivity(appContext, 0, intent, PendingIntent.FLAG_IMMUTABLE);
+
+
         NotificationCompat.Builder builder = new NotificationCompat.Builder(appContext, CHANNEL_ID)
                 .setSmallIcon(android.R.drawable.star_on)
                 .setContentTitle("Nuova notifica!")
                 //.setContentText("Sappi che è successo questo nel tuo sistema: ...")
-                .setPriority(NotificationCompat.PRIORITY_DEFAULT);
+                .setPriority(NotificationCompat.PRIORITY_DEFAULT)
+                .setContentIntent(pendingIntent);
         notificationManager.notify(0, builder.build());
     }
 

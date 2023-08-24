@@ -67,6 +67,14 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        //se l'activity viene aperta da una notifica
+        if (getIntent().getBooleanExtra("apriFragment", false)) {
+            // Carica il fragment desiderato
+            getSupportFragmentManager().beginTransaction()
+                    .replace(R.id.container,notificationFragment)
+                    .commit();
+        }
+
     }
 
 
