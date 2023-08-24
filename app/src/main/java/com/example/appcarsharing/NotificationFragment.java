@@ -58,7 +58,6 @@ public class NotificationFragment extends Fragment {
         View rootView = inflater.inflate(R.layout.fragment_notification, container, false);
         recyclerView = rootView.findViewById(R.id.recycler_view);
 
-        // Inizializza e imposta il LayoutManager
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getContext());
         recyclerView.setLayoutManager(layoutManager);
 
@@ -81,16 +80,16 @@ public class NotificationFragment extends Fragment {
 
                 adapter.notifyDataSetChanged();
 
-                if (isFirstRead) {
-                    isFirstRead = false;
-                    currentsnapshot = dataSnapshot;
+                //controlli necessari per evitare di mandare notifiche ad ogni apertura del fragment
+                if(getContext() == null) {  //se il fragment non è aperto
+                    lanciaNotifica();
                     return;
                 }
 
-                if(!currentsnapshot.getValue().equals(dataSnapshot.getValue())){
-                    currentsnapshot = dataSnapshot;
-                    lanciaNotifica();
+                if (getContext() != null) {  //se il fragment è aperto
+                    return;
                 }
+
             }
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
