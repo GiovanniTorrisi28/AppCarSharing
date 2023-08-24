@@ -4,25 +4,25 @@ import java.util.List;
 
 public class Notification {
 
-    private String mittente;
+    private Utente mittente;
     private String titolo;
     private String messaggio;
     private String data;
 
     public Notification(){}
 
-    public Notification(String mittente, String titolo, String messaggio, String data){
+    public Notification(Utente mittente, String titolo, String messaggio, String data){
         this.mittente = mittente;
         this.titolo = titolo;
         this.messaggio = messaggio;
         this.data = data;
     }
 
-    public String getMittente() {
+    public Utente getMittente() {
         return mittente;
     }
 
-    public void setMittente(String mittente) {
+    public void setMittente(Utente mittente) {
         this.mittente = mittente;
     }
 

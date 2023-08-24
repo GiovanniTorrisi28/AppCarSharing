@@ -135,7 +135,7 @@ public class RideAdapter extends RecyclerView.Adapter<RideAdapter.RideViewHolder
             DatabaseReference myRef = FirebaseDatabase.getInstance().getReference("notifiche");
             String notificaId = myRef.push().getKey();
             myRef.child(passaggio.getGuidatore().getKey()).child(notificaId).
-                    setValue(new Notification(utente.getNome() + " " + utente.getCognome(),
+                    setValue(new Notification(utente,
                             "notifica", "Nuova prenotazione per il tuo passaggio del " + passaggio.getData(), LocalDate.now().toString()))
                     .addOnCompleteListener(new OnCompleteListener<Void>() {
                         @Override

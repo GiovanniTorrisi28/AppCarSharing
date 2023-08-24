@@ -4,6 +4,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -16,6 +17,9 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+import com.squareup.picasso.Picasso;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -52,18 +56,30 @@ public class NotificationAdapter extends RecyclerView.Adapter<NotificationAdapte
     public class NotificationViewHolder extends RecyclerView.ViewHolder {
 
         private TextView mittenteTextView,messaggioTextView,dataTextView;
+        private ImageView imageView;
 
         public NotificationViewHolder(@NonNull View itemView) {
             super(itemView);
             mittenteTextView = itemView.findViewById(R.id.textview);
             dataTextView = itemView.findViewById(R.id.textview2);
             messaggioTextView = itemView.findViewById(R.id.textview3);
+            imageView = itemView.findViewById(R.id.imageview1);
         }
 
         public void bind(Notification notifica) {
-             mittenteTextView.setText(notifica.getMittente());
+             mittenteTextView.setText(notifica.getMittente().getNome() + " " + notifica.getMittente().getCognome());
              dataTextView.setText(notifica.getData());
              messaggioTextView.setText(notifica.getMessaggio());
+
+            FirebaseStorage storage = FirebaseStorage.getInstance();
+            StorageReference imageRef = storage.getReference().child("fotoProfilo/" + notifica.getMittente().getKey());
+
+            imageRef.getDownloadUrl().addOnSuccessListener(uri -> {
+                String imageUrl = uri.toString();
+                Picasso.get().load(imageUrl).into(imageView);
+            }).addOnFailureListener(exception -> {
+                System.out.println("Errore nel caricamento della foto profilo");
+            });
         }
 
     }

@@ -103,7 +103,6 @@ public class MyRideAdapter extends RecyclerView.Adapter<MyRideAdapter.RideViewHo
 
                     //se il guidatore è l'utente loggato
                     if (user.getEmail().substring(0, user.getEmail().indexOf("@")).equals(passaggio.getGuidatore().getKey())) {
-                        caricaNotifica(passaggio.getUtenti(), getUtenteByEmail(passaggio, user.getEmail()), passaggio.getData());
                         showCancellaDialog(passaggio);
                     }
                     //è un passeggero
@@ -122,6 +121,7 @@ public class MyRideAdapter extends RecyclerView.Adapter<MyRideAdapter.RideViewHo
                     .setPositiveButton("Cancella", new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialogInterface, int i) {
+                            caricaNotifica(passaggio.getUtenti(), getUtenteByEmail(passaggio, user.getEmail()), passaggio.getData());
                             cancellaPassaggio(passaggio);
                         }
                     }).setNegativeButton("Annulla", new DialogInterface.OnClickListener() {
@@ -172,7 +172,7 @@ public class MyRideAdapter extends RecyclerView.Adapter<MyRideAdapter.RideViewHo
             DatabaseReference myRef = FirebaseDatabase.getInstance().getReference("notifiche");
             String notificaId = myRef.push().getKey();
             myRef.child(destinatario.getKey()).child(notificaId).
-                    setValue(new Notification(mittente.getNome() + " " + mittente.getCognome(),
+                    setValue(new Notification(mittente,
                             "notifica", "Cancellata la prenotazione per il tuo passaggio del " + dataPassaggio,LocalDate.now().toString()))
                     .addOnCompleteListener(new OnCompleteListener<Void>() {
                         @Override
@@ -192,7 +192,7 @@ public class MyRideAdapter extends RecyclerView.Adapter<MyRideAdapter.RideViewHo
             String notificaId = myRef.push().getKey();
             for(int i = 1; i < destinatari.size(); i++) {
                 myRef.child(destinatari.get(i).getKey()).child(notificaId).
-                        setValue(new Notification(mittente.getNome() + " " + mittente.getCognome(),
+                        setValue(new Notification(mittente,
                                 "notifica", "Cancellato il passaggio del " + dataPassaggio,LocalDate.now().toString()))
                         .addOnCompleteListener(new OnCompleteListener<Void>() {
                             @Override
