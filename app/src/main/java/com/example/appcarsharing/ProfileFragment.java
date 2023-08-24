@@ -7,6 +7,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.drawable.GradientDrawable;
 import android.media.Image;
+import android.net.Uri;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -35,7 +36,9 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.ListResult;
 import com.google.firebase.storage.StorageReference;
+import com.squareup.picasso.Picasso;
 
 import org.osmdroid.config.Configuration;
 import org.osmdroid.views.MapView;
@@ -107,7 +110,7 @@ public class ProfileFragment extends Fragment {
                     utente[0] = snapshot.getValue(Utente.class);
 
                 updateRootView(utente[0], rootView);
-                getUserPhoto(rootView);
+                getUserPhoto(rootView,utente[0]);
             }
 
             @Override
@@ -128,29 +131,18 @@ public class ProfileFragment extends Fragment {
         nameSurnameEditText.setText(utente.getNome() + " " + utente.getCognome());
     }
 
-    private void getUserPhoto(View rootView){
+    private void getUserPhoto(View rootView,Utente utente){
         FirebaseStorage storage = FirebaseStorage.getInstance();
-        StorageReference imageRef = storage.getReference().child("fotoProfilo/user");
+        StorageReference imageRef = storage.getReference().child("fotoProfilo/" + utente.getKey());
+
         ImageView imageView = rootView.findViewById(R.id.profile_image_view);
 
-        final long MAX_SIZE = 1024 * 1024; // Dimensione massima dei dati binari da scaricare (1 MB)
 
-        imageRef.getBytes(MAX_SIZE).addOnSuccessListener(new OnSuccessListener<byte[]>() {
-            @Override
-            public void onSuccess(byte[] bytes) {
-                // Converte i byte in un oggetto Bitmap
-                Bitmap bitmap = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
-                // Visualizza l'immagine nell'ImageView desiderato
-                imageView.setImageBitmap(bitmap);
-
-
-            }
-        }).addOnFailureListener(new OnFailureListener() {
-            @Override
-            public void onFailure(@NonNull Exception exception) {
-                // Gestisci l'errore di caricamento dell'immagine
-                System.out.println("fallimento " + exception.toString());
-            }
+        imageRef.getDownloadUrl().addOnSuccessListener(uri -> {
+            String imageUrl = uri.toString();
+            Picasso.get().load(imageUrl).into(imageView);
+        }).addOnFailureListener(exception -> {
+            System.out.println("Errore nel caricamento della foto profilo");
         });
     }
 }
