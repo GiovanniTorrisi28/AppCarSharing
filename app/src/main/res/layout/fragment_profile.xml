@@ -23,28 +23,7 @@
             android:scaleType="centerCrop"
             android:id="@+id/profile_image_view"/>
 
-
     </androidx.cardview.widget.CardView>
-
-
-
-    <!--  android:backgroundTint="@color/black"
-        android:src="@drawable/ic_baseline_home_24"
-        -->
-
-    <EditText
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:padding="10dp"
-        android:hint="Username"
-        android:inputType="text"
-        android:layout_margin="10dp"
-        android:background="@drawable/rounded_border"
-        android:elevation="5dp"
-        android:textColor="@color/black"
-        android:enabled="false"
-        android:id="@+id/profile_email"
-        />
 
     <EditText
         android:layout_width="match_parent"
@@ -58,7 +37,26 @@
         android:textColor="@color/black"
         android:enabled="false"
         android:id="@+id/profile_name_surname"
+        android:drawableLeft="@drawable/ic_baseline_person_24"
+        android:drawablePadding="8px"
         />
+
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="10dp"
+        android:hint="Username"
+        android:inputType="text"
+        android:layout_margin="10dp"
+        android:background="@drawable/rounded_border"
+        android:elevation="5dp"
+        android:textColor="@color/black"
+        android:enabled="false"
+        android:id="@+id/profile_email"
+        android:drawableLeft="@drawable/ic_baseline_email_24"
+        android:drawablePadding="8px"
+        />
+
 
     <EditText
         android:layout_width="match_parent"
@@ -72,6 +70,8 @@
         android:enabled="false"
         android:textColor="@color/black"
         android:id="@+id/profile_phone"
+        android:drawableLeft="@drawable/ic_baseline_phone_24"
+        android:drawablePadding="8px"
         />
 
     <LinearLayout

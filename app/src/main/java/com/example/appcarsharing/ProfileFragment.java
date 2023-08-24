@@ -137,7 +137,6 @@ public class ProfileFragment extends Fragment {
 
         ImageView imageView = rootView.findViewById(R.id.profile_image_view);
 
-
         imageRef.getDownloadUrl().addOnSuccessListener(uri -> {
             String imageUrl = uri.toString();
             Picasso.get().load(imageUrl).into(imageView);
