@@ -7,10 +7,11 @@
     android:orientation="vertical"
     android:gravity="center"
     android:padding="15dp"
+    android:background="#eff"
     tools:context=".Login">
 
     <TextView
-        android:text="login"
+        android:text="Login"
         android:textSize="25sp"
         android:textStyle="bold"
         android:gravity="center"
@@ -18,26 +19,35 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
 
-    <com.google.android.material.textfield.TextInputLayout
+    <EditText
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-        <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/email"
-            android:hint="email"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
-    </com.google.android.material.textfield.TextInputLayout>
+        android:layout_height="wrap_content"
+        android:padding="10dp"
+        android:hint="Email"
+        android:inputType="text"
+        android:layout_margin="10dp"
+        android:background="@drawable/rounded_border"
+        android:elevation="5dp"
+        android:textColor="@color/black"
+        android:id="@+id/email"
+        android:drawableLeft="@drawable/ic_baseline_email_24"
+        android:drawablePadding="10px"
+        />
 
-    <com.google.android.material.textfield.TextInputLayout
+    <EditText
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-        <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/password"
-            android:hint="password"
-            android:inputType = "textPassword"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
-    </com.google.android.material.textfield.TextInputLayout>
+        android:layout_height="wrap_content"
+        android:padding="10dp"
+        android:hint="Password"
+        android:inputType="textPassword"
+        android:layout_margin="10dp"
+        android:background="@drawable/rounded_border"
+        android:elevation="5dp"
+        android:textColor="@color/black"
+        android:id="@+id/password"
+        android:drawableLeft="@drawable/baseline_lock_24"
+        android:drawablePadding="10px"
+        />
 
     <ProgressBar
         android:id="@+id/progressBar"
@@ -47,18 +57,18 @@
 
     <Button
         android:id="@+id/btn_login"
-        android:text="accedi"
+        android:text="Accedi"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content" />
 
 
     <TextView
         android:textStyle="bold"
-        android:textSize="20sp"
+        android:textSize="15sp"
         android:gravity="center"
         android:layout_marginTop="20dp"
         android:id="@+id/registerNow"
-        android:text="clicca per registrazione"
+        android:text="Non sei registrato? Registrati ora!"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
 
