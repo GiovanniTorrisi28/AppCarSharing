@@ -5,4 +5,5 @@
     <color name = "lightblue">#05CBFD</color>
     <color name = "purple">#673AB7</color>
     <color name = "lightgreen">#26B8AB</color>
+    <color name="teal">#FF26B8AB</color>
 </resources>

@@ -9,8 +9,12 @@
           <!-- Personalizza qui il tuo tema-->
         <item name="colorPrimary">#FF26B8AB</item>
         <item name="colorPrimaryDark">#FF26B8AB</item>
-
     </style>
 
+    <style name="Theme.AppCarSharing.NoActionBar" parent="Theme.Material3.Light.NoActionBar">
+        <!-- Personalizza qui il tuo tema-->
+        <item name="colorPrimary">#FF26B8AB</item>
+        <item name="colorPrimaryDark">#FF26B8AB</item>
+    </style>
 
 </resources>
