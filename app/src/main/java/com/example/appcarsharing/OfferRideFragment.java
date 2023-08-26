@@ -145,8 +145,8 @@ public class OfferRideFragment extends Fragment {
         Spinner destinationSpinner = rootView.findViewById(R.id.destinationSpinner);
 
         // Popolare gli spinner con le opzioni desiderate
-        String[] sourceOptions = {"Sorgente", "Opzione 2", "Opzione 3"};
-        String[] destinationOptions = {"Destinazione", "Opzione B", "Opzione C"};
+        String[] sourceOptions = {"Sorgente", "Cittadella Universitaria", "Monastero dei Benedettini", "Torre Biologica", "Palazzo delle Scienze", "Piazza Università"};
+        String[] destinationOptions = {"Destinazione", "Cittadella Universitaria", "Monastero dei Benedettini", "Torre Biologica", "Palazzo delle Scienze", "Piazza Università"};
 
         ArrayAdapter<String> sourceAdapter = new ArrayAdapter<>(getContext(), android.R.layout.simple_spinner_item, sourceOptions);
         ArrayAdapter<String> destinationAdapter = new ArrayAdapter<>(getContext(), android.R.layout.simple_spinner_item, destinationOptions);
