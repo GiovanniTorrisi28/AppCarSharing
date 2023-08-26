@@ -37,6 +37,11 @@ import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 
+import java.nio.charset.StandardCharsets;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
+import java.util.Base64;
+
 public class Registration extends AppCompatActivity {
 
     TextInputEditText editTextEmail, editTextPassword, editTextNome, editTextCognome, editTextTelefono;
@@ -149,16 +154,20 @@ public class Registration extends AppCompatActivity {
                                     Toast.makeText(Registration.this, "Account created.",
                                             Toast.LENGTH_SHORT).show();
                                     //inserisce l'utente dentro il db di realtime
-                                    Utente user = new Utente(email, password, nome, cognome, telefono);
+                                    Utente user = new Utente(email, hashWith256(password), nome, cognome, telefono);
                                     String id = email.substring(0, email.indexOf("@"));
                                     //inserire il controllo sul dominio della email
-                                    myRef.child("Utenti").child(id).setValue(user);
+                                    myRef.child("Utenti").child(id).setValue(user).addOnCompleteListener(new OnCompleteListener<Void>() {
+                                        @Override
+                                        public void onComplete(@NonNull Task<Void> task) {
+                                            Intent intent = new Intent(Registration.this, Login.class);
+                                            startActivity(intent);
+                                        }
+                                    });
 
                                     //ora carico la foto dentro lo storage
-
                                     StorageReference imageRef = folderRef.child(email.substring(0, email.indexOf("@")));
                                     UploadTask uploadTask = imageRef.putFile(selectedImageUri);
-
                                     uploadTask.addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
                                         @Override
                                         public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
@@ -210,6 +219,20 @@ public class Registration extends AppCompatActivity {
            // StorageReference imageRef = folderRef.child(id.substring(0, id.indexOf("@")));
 
         }
+    }
+
+    public String hashWith256(String textToHash){
+        String encoded = "";
+        try {
+            MessageDigest digest = MessageDigest.getInstance("SHA-256");
+            byte[] byteOfTextToHash = textToHash.getBytes(StandardCharsets.UTF_8);
+            byte[] hashedByetArray = digest.digest(byteOfTextToHash);
+            encoded = Base64.getEncoder().encodeToString(hashedByetArray);
+        }catch (NoSuchAlgorithmException exception){
+            System.out.println("L'algoritmo specifica per l'hashing non è valido");
+            return textToHash;
+        }
+        return encoded;
     }
 
 }
