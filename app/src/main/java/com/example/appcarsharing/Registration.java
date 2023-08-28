@@ -3,18 +3,27 @@ package com.example.appcarsharing;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
+import androidx.viewpager.widget.ViewPager;
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.pm.PackageManager;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
+import android.provider.Settings;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
@@ -26,6 +35,7 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.firebase.auth.AuthResult;
@@ -44,7 +54,7 @@ import java.util.Base64;
 
 public class Registration extends AppCompatActivity {
 
-    TextInputEditText editTextEmail, editTextPassword, editTextNome, editTextCognome, editTextTelefono;
+    EditText editTextEmail, editTextPassword, editTextNome, editTextCognome, editTextTelefono;
     Button buttonReg;
     ImageButton buttonPhoto;
     FirebaseAuth mAuth;
@@ -57,6 +67,7 @@ public class Registration extends AppCompatActivity {
 
     NetworkChangeListener networkChangeListener = new NetworkChangeListener();
     Uri selectedImageUri;
+    private static final int PERMISSION_REQUEST_READ_EXTERNAL_STORAGE = 1;
     @Override
     public void onStart() {
         super.onStart();
@@ -198,10 +209,7 @@ public class Registration extends AppCompatActivity {
         buttonPhoto.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
-                intent.setType("image/*"); // Specifica che si desidera selezionare solo immagini
-               // intent.putExtra("email", String.valueOf(editTextEmail.getText()));
-                startActivityForResult(intent, 1);
+              requestStoragePermission();
             }
         });
 
@@ -212,12 +220,7 @@ public class Registration extends AppCompatActivity {
         super.onActivityResult(requestCode, resultCode, data);
 
         if (requestCode == 1 && resultCode == RESULT_OK && data != null) {
-            //String id = data.getStringExtra("email"); //sarà il nome della foto
-
             selectedImageUri = data.getData();
-            // Esegui l'upload su Firebase Storage utilizzando l'URI ottenuto
-           // StorageReference imageRef = folderRef.child(id.substring(0, id.indexOf("@")));
-
         }
     }
 
@@ -234,5 +237,73 @@ public class Registration extends AppCompatActivity {
         }
         return encoded;
     }
+
+    //autorizzazione per l'accesso ai dati multimediali
+    private void requestStoragePermission() {
+        if (ContextCompat.checkSelfPermission(Registration.this, android.Manifest.permission.READ_EXTERNAL_STORAGE)
+                != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(Registration.this,
+                    new String[]{android.Manifest.permission.READ_EXTERNAL_STORAGE},
+                    PERMISSION_REQUEST_READ_EXTERNAL_STORAGE);
+        } else {
+            // L'autorizzazione è già stata concessa
+            openImagePicker();
+        }
+    }
+
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        if (requestCode == PERMISSION_REQUEST_READ_EXTERNAL_STORAGE) {
+            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                // L'autorizzazione è stata concessa
+                openImagePicker();
+            } else {
+                // L'autorizzazione è stata negata
+                if (isPermissionPermanentlyDenied(android.Manifest.permission.READ_EXTERNAL_STORAGE)) {
+                    // L'utente ha selezionato "Non chiedere mai più" per l'autorizzazione
+                    showPermissionDeniedDialog();
+                }
+            }
+        }
+    }
+
+    private boolean isPermissionPermanentlyDenied(String permission) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            if (!shouldShowRequestPermissionRationale(permission)) {
+                return ActivityCompat.checkSelfPermission(this, permission) != PackageManager.PERMISSION_GRANTED;
+            }
+        }
+        return false;
+    }
+
+
+    private void showPermissionDeniedDialog() {
+        MaterialAlertDialogBuilder builder = new MaterialAlertDialogBuilder(this);
+        builder.setTitle("Autorizzazione richiesta");
+        builder.setMessage("Per utilizzare questa funzionalità, devi concedere l'autorizzazione per accedere ai file. Vuoi aprire le impostazioni dell'app per abilitare l'autorizzazione?");
+        builder.setPositiveButton("Apri impostazioni", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                Intent intent = new Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
+                Uri uri = Uri.fromParts("package", getPackageName(), null);
+                intent.setData(uri);
+                startActivity(intent);
+            }
+        });
+        builder.setNegativeButton("Annulla", null);
+
+        AlertDialog dialog = builder.show();
+        dialog.show();
+    }
+
+
+    private void openImagePicker() {
+        Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
+        intent.setType("image/*");
+        startActivityForResult(intent, 1);
+    }
+
 
 }

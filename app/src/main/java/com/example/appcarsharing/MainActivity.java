@@ -2,9 +2,6 @@ package com.example.appcarsharing;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.app.NotificationCompat;
-import androidx.work.OneTimeWorkRequest;
-import androidx.work.WorkManager;
 
 import android.annotation.SuppressLint;
 import android.app.NotificationChannel;

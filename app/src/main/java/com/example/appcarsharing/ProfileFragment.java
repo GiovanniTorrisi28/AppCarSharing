@@ -1,5 +1,7 @@
 package com.example.appcarsharing;
 
+import static android.app.Activity.RESULT_OK;
+
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -11,6 +13,7 @@ import android.net.Uri;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
@@ -24,7 +27,9 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -38,6 +43,7 @@ import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.ListResult;
 import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
 import com.squareup.picasso.Picasso;
 
 import org.osmdroid.config.Configuration;
@@ -55,6 +61,8 @@ public class ProfileFragment extends Fragment {
     private DatabaseReference myRef;
     private FirebaseAuth auth;
     private FirebaseUser user;
+    private ImageView imageView;
+    private ProgressBar progressBar;
 
     public ProfileFragment() {
         auth = FirebaseAuth.getInstance();
@@ -67,6 +75,7 @@ public class ProfileFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_profile, container, false);
 
+        progressBar = rootView.findViewById(R.id.progressBar);
         //riempie la view con i dati utente
         getUserData(rootView);
 
@@ -97,7 +106,50 @@ public class ProfileFragment extends Fragment {
             }
         });
 
+        //click sulla foto profilo
+        imageView = rootView.findViewById(R.id.profile_image_view);
+        imageView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                /*Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
+                intent.setType("image/*"); // Specifica che si desidera selezionare solo immagini
+                startActivityForResult(intent, 1);
+                 */
+            }
+        });
+
         return rootView;
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (requestCode == 1 && resultCode == RESULT_OK && data != null) {
+            FirebaseStorage storage = FirebaseStorage.getInstance();
+            StorageReference imageRef = storage.getReference().child("fotoProfilo").child(user.getEmail().substring(0, user.getEmail().indexOf("@")));
+            UploadTask uploadTask = imageRef.putFile(data.getData());
+            progressBar.setVisibility(View.VISIBLE);
+            uploadTask.addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                @Override
+                public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                    // Upload completato con successo
+                    imageRef.getDownloadUrl().addOnSuccessListener(uri -> {
+                        String imageUrl = uri.toString();
+                        Picasso.get().load(imageUrl).into(imageView);
+                    });
+                    progressBar.setVisibility(View.GONE);
+                }
+            }).addOnFailureListener(new OnFailureListener() {
+                @Override
+                public void onFailure(@NonNull Exception e) {
+                    // Gestisci l'errore durante l'upload
+                    Toast.makeText(getContext(), "Error loading image",
+                            Toast.LENGTH_SHORT).show();
+                }
+            });
+
+        }
     }
 
     private void getUserData(View rootView) {
@@ -143,6 +195,11 @@ public class ProfileFragment extends Fragment {
         }).addOnFailureListener(exception -> {
             System.out.println("Errore nel caricamento della foto profilo");
         });
+    }
+
+    private void changeUserPhoto(View rootView,Utente utente){
+
+
     }
 }
 

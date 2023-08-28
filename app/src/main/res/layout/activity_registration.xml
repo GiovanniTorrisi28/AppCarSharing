@@ -4,110 +4,116 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
     android:gravity="center"
+    android:orientation="vertical"
     android:padding="15dp"
+    android:background="#eff"
     tools:context=".Registration">
 
     <TextView
-        android:text="registrazione"
-        android:textSize="25sp"
-        android:textStyle="bold"
-        android:gravity="center"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
         android:layout_marginBottom="28dp"
+        android:gravity="center"
+        android:text="Registrazione"
+        android:textSize="25sp"
+        android:textStyle="bold" />
+
+    <EditText
+        android:id="@+id/nome"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        android:layout_margin="10dp"
+        android:background="@drawable/rounded_border"
+        android:elevation="5dp"
+        android:hint="Nome"
+        android:inputType="text"
+        android:padding="10dp"
+        android:textColor="@color/black" />
 
-    <com.google.android.material.textfield.TextInputLayout
+    <EditText
+        android:id="@+id/cognome"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-        <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/nome"
-            android:hint="Nome"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
-    </com.google.android.material.textfield.TextInputLayout>
+        android:layout_height="wrap_content"
+        android:layout_margin="10dp"
+        android:background="@drawable/rounded_border"
+        android:elevation="5dp"
+        android:hint="Cognome"
+        android:inputType="text"
+        android:padding="10dp"
+        android:textColor="@color/black" />
 
-    <com.google.android.material.textfield.TextInputLayout
+    <EditText
+        android:id="@+id/email"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-        <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/cognome"
-            android:hint="Cognome"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
-    </com.google.android.material.textfield.TextInputLayout>
+        android:layout_height="wrap_content"
+        android:layout_margin="10dp"
+        android:background="@drawable/rounded_border"
+        android:elevation="5dp"
+        android:hint="Email"
+        android:inputType="text"
+        android:padding="10dp"
+        android:textColor="@color/black" />
 
-
-    <com.google.android.material.textfield.TextInputLayout
+    <EditText
+        android:id="@+id/password"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-        <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/email"
-            android:hint="email"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
-    </com.google.android.material.textfield.TextInputLayout>
+        android:layout_height="wrap_content"
+        android:layout_margin="10dp"
+        android:background="@drawable/rounded_border"
+        android:elevation="5dp"
+        android:hint="Password"
+        android:inputType="textPassword"
+        android:padding="10dp"
+        android:textColor="@color/black" />
 
-    <com.google.android.material.textfield.TextInputLayout
+
+    <EditText
+        android:id="@+id/telefono"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-        <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/password"
-            android:hint="password"
-            android:inputType = "textPassword"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
-    </com.google.android.material.textfield.TextInputLayout>
+        android:layout_height="wrap_content"
+        android:layout_margin="10dp"
+        android:background="@drawable/rounded_border"
+        android:elevation="5dp"
+        android:hint="Telefono"
+        android:inputType="number"
+        android:padding="10dp"
+        android:textColor="@color/black" />
 
 
-    <com.google.android.material.textfield.TextInputLayout
+    <ImageButton
+        android:id="@+id/fotoProfilo"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-        <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/telefono"
-            android:hint="telefono"
-            android:inputType = "number"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
-    </com.google.android.material.textfield.TextInputLayout>
-
-
-    <com.google.android.material.textfield.TextInputLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-        <ImageButton
-            android:id="@+id/fotoProfilo"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:backgroundTint="#000255"
-            android:contextClickable="true"
-            android:scaleType="center"
-            app:srcCompat="@android:drawable/ic_menu_gallery" />
-    </com.google.android.material.textfield.TextInputLayout>
-
+        android:layout_height="wrap_content"
+        android:layout_margin="10dp"
+        android:background="@drawable/rounded_border"
+        android:backgroundTint="#000255"
+        android:contextClickable="true"
+        android:scaleType="center"
+        app:srcCompat="@android:drawable/ic_menu_gallery" />
 
 
     <ProgressBar
         android:id="@+id/progressBar"
-        android:visibility="gone"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        android:layout_margin="5dp"
+        android:visibility="gone" />
 
     <Button
         android:id="@+id/btn_register"
-        android:text="registrazione"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        android:text="Registrazione" />
 
     <TextView
-        android:textStyle="bold"
-        android:textSize="20sp"
-        android:gravity="center"
-        android:layout_marginTop="20dp"
         android:id="@+id/loginNow"
-        android:text="clicca per il login"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:gravity="center"
+        android:text="Hai già un account? Accedi!"
+        android:textSize="20sp"
+        android:textStyle="bold" />
 
 </LinearLayout>
