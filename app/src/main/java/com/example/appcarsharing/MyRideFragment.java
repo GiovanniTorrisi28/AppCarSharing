@@ -53,7 +53,7 @@ public class MyRideFragment extends Fragment {
 
                     Ride ride = snapshot.getValue(Ride.class);
                     if(checkRide(ride))
-                       passaggiList.add(ride);
+                       passaggiList.add(0,ride);
 
                 }
                 adapter.notifyDataSetChanged();
