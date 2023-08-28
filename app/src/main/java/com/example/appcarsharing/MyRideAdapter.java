@@ -103,7 +103,12 @@ public class MyRideAdapter extends RecyclerView.Adapter<MyRideAdapter.RideViewHo
 
                     //se il guidatore è l'utente loggato
                     if (user.getEmail().substring(0, user.getEmail().indexOf("@")).equals(passaggio.getGuidatore().getKey())) {
-                        showCancellaDialog(passaggio);
+                        if(passaggio.getUtenti().size() > 1)
+                            showCancellaDialog(passaggio);
+                        else{
+                            caricaNotifica(passaggio.getUtenti(), getUtenteByEmail(passaggio, user.getEmail()), passaggio.getData());
+                            cancellaPassaggio(passaggio);
+                        }
                     }
                     //è un passeggero
                     else {
