@@ -191,6 +191,19 @@ public class OfferRideFragment extends Fragment {
                     return;
                 }
 
+                LocalDate newDate = LocalDate.of(date.get("year"),date.get("month") + 1,date.get("day"));
+                LocalTime newTime = LocalTime.of(time.get("hour"),time.get("minute"));
+                if(newDate.compareTo(LocalDate.now()) < 0) {
+                    Toast.makeText(getContext(), "Inserisci una data futura", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                else if(newDate.compareTo(LocalDate.now()) == 0){
+                        if(newTime.isBefore(LocalTime.now())){
+                            Toast.makeText(getContext(), "Inserisci un orario futuro", Toast.LENGTH_SHORT).show();
+                            return;
+                        }
+                }
+
                 //prende i dati dell'utente
                 myRef.addValueEventListener(new ValueEventListener() {
                     @Override
