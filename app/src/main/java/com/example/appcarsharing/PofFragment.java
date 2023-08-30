@@ -26,6 +26,7 @@ import android.provider.Settings;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 
@@ -46,34 +47,31 @@ public class PofFragment extends Fragment {
     private static final int LOCATION_PERMISSION_REQUEST_CODE = 1;
     private LocationListener locationListener;
     private LocationManager locationManager;
+    private boolean setting = false;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View rootView = inflater.inflate(R.layout.fragment_pof, container, false);
-        locationManager = (LocationManager) getContext().getSystemService(getContext().LOCATION_SERVICE);
 
-        // Collega la variabile mapView al layout
         mapView = rootView.findViewById(R.id.map_view);
-
-        // Imposta il livello di zoom e la posizione iniziale
         mapView.getController().setZoom(15);
         mapView.getController().setCenter(new GeoPoint(37.51916027246007, 15.083418417311774));
 
         addMarkers();
 
-        // Abilita il multi-touch e il pinch-to-zoom
         mapView.setMultiTouchControls(true);
 
         //controllo dei permessi sulla localizzazione
         if (ActivityCompat.checkSelfPermission(requireContext(), android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             //Permessi non concessi, richiedili
-            requestPermissions(new String[]{android.Manifest.permission.ACCESS_FINE_LOCATION}, LOCATION_PERMISSION_REQUEST_CODE);
             if (isPermissionPermanentlyDenied(Manifest.permission.ACCESS_FINE_LOCATION)) {
                 // L'utente ha selezionato "Non chiedere mai più" per l'autorizzazione
                 showPermissionDeniedDialog();
             }
+            requestPermissions(new String[]{android.Manifest.permission.ACCESS_FINE_LOCATION}, LOCATION_PERMISSION_REQUEST_CODE);
+
         } else {
             // Hai già i permessi
             addMyPositionMarker();
@@ -162,13 +160,20 @@ public class PofFragment extends Fragment {
 
     @SuppressLint("MissingPermission")
     private void addMyPositionMarker() {
-        //posizione dell'utente
+        locationManager = (LocationManager) getContext().getSystemService(getContext().LOCATION_SERVICE);
         myMarker = new Marker(mapView);
         myMarker.setIcon(getContext().getResources().getDrawable(R.drawable.baseline_circle_24));
         Location lastKnownLocation = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
-        myMarker.setPosition(new GeoPoint(lastKnownLocation.getLatitude(),lastKnownLocation.getLongitude()));
+        if(lastKnownLocation != null)
+           myMarker.setPosition(new GeoPoint(lastKnownLocation.getLatitude(),lastKnownLocation.getLongitude()));
         myMarker.setTitle("Posizione corrente");
+
+        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(getContext());
+        alertDialogBuilder.setTitle("GPS disabilitato");
+        alertDialogBuilder.setMessage("Riattivalo per vedere la tua posizione corrente");
+        AlertDialog alertDialog = alertDialogBuilder.create();
         locationListener = new LocationListener() {
+
             @Override
             public void onLocationChanged(Location location) {
                 double lat = location.getLatitude();
@@ -177,11 +182,49 @@ public class PofFragment extends Fragment {
                 GeoPoint myLocation = new GeoPoint(lat, lon);
                 myMarker.setPosition(myLocation);
             }
+
+            @Override
+            public void onProviderEnabled(String provider) {
+                // GPS attivato
+                if (provider.equals(LocationManager.GPS_PROVIDER)) {
+                   // alertDialog.dismiss();
+                    mapView.getOverlays().add(myMarker);
+                }
+            }
+
+            @Override
+            public void onProviderDisabled(String provider) {
+                //GPS disabilitato
+                if (provider.equals(LocationManager.GPS_PROVIDER)) {
+                    System.out.println("Gps disattivato");
+                    Toast.makeText(getContext(), "Per vedere la tua posizione riattiva il GPS", Toast.LENGTH_LONG).show();
+                    mapView.getOverlays().remove(myMarker);
+                    mapView.invalidate();
+                   // alertDialog.show();
+                }
+            }
+
         };
 
-        mapView.getOverlays().add(myMarker);
-        locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, locationListener);
-
+        boolean isGPSEnabled = locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER);
+        if (!isGPSEnabled) {
+            // GPS non abilitato, richiedi all'utente di attivarlo
+           /* alertDialogBuilder.setTitle("GPS disabilitato");
+            alertDialogBuilder.setMessage("Il GPS è disabilitato. Vuoi andare alle impostazioni per abilitarlo?");
+            alertDialogBuilder.setPositiveButton("Impostazioni", (dialog, which) -> {
+                Intent intent = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
+                startActivity(intent);
+                setting = true;
+            });
+            alertDialogBuilder.setNegativeButton("Annulla", (dialog, which) -> dialog.cancel());
+            alertDialog.show();
+            */
+            Toast.makeText(getContext(), "Per vedere la tua posizione attiva il GPS", Toast.LENGTH_LONG).show();
+        } else {
+            // GPS abilitato, procedi con la richiesta di aggiornamenti sulla posizione
+            mapView.getOverlays().add(myMarker);
+            locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, locationListener);
+        }
     }
 
     private boolean isPermissionPermanentlyDenied(String permission) {
@@ -193,7 +236,7 @@ public class PofFragment extends Fragment {
         return false;
     }
 
-    private boolean setting = false;
+
     private void showPermissionDeniedDialog() {
         MaterialAlertDialogBuilder builder = new MaterialAlertDialogBuilder(getContext());
         builder.setTitle("Autorizzazione richiesta");
@@ -218,7 +261,7 @@ public class PofFragment extends Fragment {
     public void onResume() {
         super.onResume();
         if(setting){
-           if (ActivityCompat.checkSelfPermission(requireContext(), android.Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
+           if (ActivityCompat.checkSelfPermission(requireContext(), android.Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED && locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
                addMyPositionMarker();
                setting = false;
            }
