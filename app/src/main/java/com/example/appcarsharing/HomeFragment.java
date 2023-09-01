@@ -33,7 +33,7 @@ public class HomeFragment extends Fragment {
         tabLayout.setupWithViewPager(viewPager);
 
         //fragment aperto dalla mappa
-        Bundle args = getArguments();
+       /* Bundle args = getArguments();
         if (args != null)
             tabLayout.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
                 @Override
@@ -42,7 +42,7 @@ public class HomeFragment extends Fragment {
                     tabLayout.getViewTreeObserver().removeOnGlobalLayoutListener(this);
                 }
             });
-
+*/
         return rootView;
     }
 

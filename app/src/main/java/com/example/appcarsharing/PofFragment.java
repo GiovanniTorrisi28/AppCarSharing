@@ -86,7 +86,7 @@ public class PofFragment extends Fragment {
     private void addMarkers() {
         List<OverlayItem> items = new ArrayList<>();
 
-        List<PointOfInterest> pointsOfInterest = Arrays.asList(new PointOfInterest("Cittadella Universitaria"," Via S. Sofia 64 \n", new GeoPoint(37.52427537205766, 15.070995366336996),1),
+        List<PointOfInterest> pointsOfInterest = Arrays.asList(new PointOfInterest("Cittadella Universitaria"," Via S. Sofia 64", new GeoPoint(37.52427537205766, 15.070995366336996),1),
                 new PointOfInterest("Monastero dei Benedettini"," Piazza Dante Alighieri 32",new GeoPoint(37.50374671642855, 15.080111448460787),2),
                 new PointOfInterest("Torre Biologica","Via S. Sofia 89",new GeoPoint(37.52983938041185, 15.067811450991744),3),
                 new PointOfInterest("Palazzo delle Scienze","Corso Italia 55",new GeoPoint(37.515439382057885, 15.09544739517285),4),
@@ -95,7 +95,7 @@ public class PofFragment extends Fragment {
 
         //aggiunta dei marcatori
         for(PointOfInterest pof: pointsOfInterest) {
-            OverlayItem item = new OverlayItem(pof.getNome(), pof.getIndirizzo(), pof.getCoordinate());
+            OverlayItem item = new OverlayItem(pof.getNome(), pof.getIndirizzo() + "\n" + pof.getCoordinate().getLatitude() + " " + pof.getCoordinate().getLongitude(), pof.getCoordinate());
             item.setMarker(getContext().getResources().getDrawable(R.drawable.ic_marker_item));
             items.add(item);
         }
@@ -105,7 +105,7 @@ public class PofFragment extends Fragment {
                 new ItemizedIconOverlay.OnItemGestureListener<OverlayItem>() {
                     @Override
                     public boolean onItemSingleTapUp(final int index, final OverlayItem item) {
-                        showDialog(item.getTitle(), item.getSnippet());
+                        showDialog(item.getTitle(), item.getSnippet(),index);
                         return true;
                     }
 
@@ -118,7 +118,7 @@ public class PofFragment extends Fragment {
         mapView.getOverlays().add(overlay);
     }
 
-    private void showDialog(String title, String message) {
+    private void showDialog(String title, String message,int index) {
         MaterialAlertDialogBuilder builder = new MaterialAlertDialogBuilder(getContext());
         builder.setTitle(title);
         builder.setMessage(message);
@@ -130,8 +130,8 @@ public class PofFragment extends Fragment {
                 FragmentManager fragmentManager = requireActivity().getSupportFragmentManager();
                 FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
                 Bundle args = new Bundle();
-                args.putInt("selectedPage",1);
-                HomeFragment newFragment = new HomeFragment();
+                args.putInt("selectedDestination",index + 1);
+                OfferRideFragment newFragment = new OfferRideFragment();
                 newFragment.setArguments(args);
                 fragmentTransaction.replace(R.id.container, newFragment);
                 fragmentTransaction.addToBackStack(null);
@@ -148,8 +148,8 @@ public class PofFragment extends Fragment {
                 FragmentManager fragmentManager = requireActivity().getSupportFragmentManager();
                 FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
                 Bundle args = new Bundle();
-                args.putInt("selectedPage",0);
-                HomeFragment newFragment = new HomeFragment();
+                args.putInt("selectedDestination",index + 1);
+                AskRideFragment newFragment = new AskRideFragment();
                 newFragment.setArguments(args);
                 fragmentTransaction.replace(R.id.container, newFragment);
                 fragmentTransaction.addToBackStack(null);

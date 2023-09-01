@@ -14,7 +14,7 @@ import java.util.List;
 
 public class TabPagerAdapter extends FragmentStatePagerAdapter {
     private static final int NUM_TABS = 2;
-    private List<CharSequence> titles = Arrays.asList("Chiedi Passaggio","Offri Passaggio");
+    private List<CharSequence> titles = Arrays.asList("Cerca Passaggio","Offri Passaggio");
     public TabPagerAdapter(FragmentManager fm) {
         super(fm);
     }

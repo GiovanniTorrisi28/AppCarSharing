@@ -145,7 +145,7 @@ public class OfferRideFragment extends Fragment {
         Spinner destinationSpinner = rootView.findViewById(R.id.destinationSpinner);
 
         // Popolare gli spinner con le opzioni desiderate
-        String[] sourceOptions = {"Sorgente", "Cittadella Universitaria", "Monastero dei Benedettini", "Torre Biologica", "Palazzo delle Scienze", "Villa Cerami"};
+        String[] sourceOptions = {"Partenza", "Cittadella Universitaria", "Monastero dei Benedettini", "Torre Biologica", "Palazzo delle Scienze", "Villa Cerami"};
         String[] destinationOptions = {"Destinazione", "Cittadella Universitaria", "Monastero dei Benedettini", "Torre Biologica", "Palazzo delle Scienze", "Villa Cerami"};
 
         ArrayAdapter<String> sourceAdapter = new ArrayAdapter<>(getContext(), android.R.layout.simple_spinner_item, sourceOptions);
@@ -157,6 +157,10 @@ public class OfferRideFragment extends Fragment {
         sourceSpinner.setAdapter(sourceAdapter);
         destinationSpinner.setAdapter(destinationAdapter);
 
+        Bundle args = getArguments();
+        if(args != null)
+            destinationSpinner.setSelection(args.getInt("selectedDestination"));
+
         //gestione invio
         Button submitButton = rootView.findViewById(R.id.submitButton);
         submitButton.setOnClickListener(new View.OnClickListener() {
@@ -167,12 +171,12 @@ public class OfferRideFragment extends Fragment {
                 String selectedDestinationOption = (String) destinationSpinner.getSelectedItem();
                 //controllo sulla sorgente
                 if (selectedSourceOption.equals(sourceOptions[0])) {
-                    Toast.makeText(getContext(), "Inserisci sorgente", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getContext(), "Inserisci luogo di partenza", Toast.LENGTH_SHORT).show();
                     return;
                 }
                 //controllo sulla destinazione
                 if (selectedDestinationOption.equals(destinationOptions[0])) {
-                    Toast.makeText(getContext(), "Inserisci destinazione", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getContext(), "Inserisci luogo di destinazione", Toast.LENGTH_SHORT).show();
                     return;
                 }
                 //controllo sulla targa

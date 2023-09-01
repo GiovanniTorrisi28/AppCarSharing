@@ -16,7 +16,7 @@
         android:padding="15dp">
 
         <TextView
-            android:text="Crea Passaggio"
+            android:text="Offri Passaggio"
             android:textSize="25sp"
             android:textStyle="bold"
             android:gravity="center"

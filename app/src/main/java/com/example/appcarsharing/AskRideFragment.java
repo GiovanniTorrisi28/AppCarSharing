@@ -58,7 +58,7 @@ public class AskRideFragment extends Fragment {
         Spinner destinationSpinner = rootView.findViewById(R.id.destinationSpinner);
 
         // Popolare gli spinner con le opzioni desiderate
-        String[] sourceOptions = {"Sorgente", "Cittadella Universitaria", "Monastero dei Benedettini", "Torre Biologica", "Palazzo delle Scienze", "Villa Cerami"};
+        String[] sourceOptions = {"Partenza", "Cittadella Universitaria", "Monastero dei Benedettini", "Torre Biologica", "Palazzo delle Scienze", "Villa Cerami"};
         String[] destinationOptions = {"Destinazione", "Cittadella Universitaria", "Monastero dei Benedettini", "Torre Biologica", "Palazzo delle Scienze", "Villa Cerami"};
 
         ArrayAdapter<String> sourceAdapter = new ArrayAdapter<>(getContext(), android.R.layout.simple_spinner_item, sourceOptions);
@@ -70,9 +70,9 @@ public class AskRideFragment extends Fragment {
         sourceSpinner.setAdapter(sourceAdapter);
         destinationSpinner.setAdapter(destinationAdapter);
 
-        /*if(args != null)
-           sourceSpinner.setSelection(args.getInt("prova"));
-*/
+        if(args != null)
+           destinationSpinner.setSelection(args.getInt("selectedDestination"));
+
         timeIconStart = rootView.findViewById(R.id.time_icon_start);
         timeIconEnd = rootView.findViewById(R.id.time_icon_end);
         timeStartSetListener = new TimePickerDialog.OnTimeSetListener() {
@@ -145,12 +145,12 @@ public class AskRideFragment extends Fragment {
                 String selectedDestinationOption = (String) destinationSpinner.getSelectedItem();
                 //controllo sulla sorgente
                 if (selectedSourceOption.equals(sourceOptions[0])) {
-                    Toast.makeText(getContext(), "Inserisci sorgente", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getContext(), "Inserisci luogo di partenza", Toast.LENGTH_SHORT).show();
                     return;
                 }
                 //controllo sulla destinazione
                 if (selectedDestinationOption.equals(destinationOptions[0])) {
-                    Toast.makeText(getContext(), "Inserisci destinazione", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getContext(), "Inserisci luogo di destinazione", Toast.LENGTH_SHORT).show();
                     return;
                 }
 
