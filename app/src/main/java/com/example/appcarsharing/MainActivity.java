@@ -34,7 +34,6 @@ public class MainActivity extends AppCompatActivity {
     NotificationFragment notificationFragment = new NotificationFragment(this);
     PofFragment pofFragment = new PofFragment();
     ProfileFragment profileFragment = new ProfileFragment();
-    TestFragment testFragment = new TestFragment();
     NetworkChangeListener networkChangeListener = new NetworkChangeListener();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,12 +41,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         bottomNavigationView  = findViewById(R.id.bottom_navigation);
-
         getSupportFragmentManager().beginTransaction().replace(R.id.container,homeFragment).commit();
-
-        BadgeDrawable badgeDrawable = bottomNavigationView.getOrCreateBadge(R.id.notification);
-        badgeDrawable.setVisible(true);
-        badgeDrawable.setNumber(8);
 
         bottomNavigationView.setOnItemSelectedListener(new NavigationBarView.OnItemSelectedListener() {
             @SuppressLint("NonConstantResourceId")

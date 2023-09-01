@@ -32,8 +32,9 @@ public class AskRideFragment extends Fragment {
     private ImageView timeIconStart,timeIconEnd,calendarIcon;
     private HashMap<String, Integer> date;
     private HashMap<String,Integer> timeStart,timeEnd;
+    private int destination;
 
-    public AskRideFragment() {
+    public AskRideFragment(int destination) {
         date = new HashMap<>();
         timeStart = new HashMap<>();
         timeEnd = new HashMap<>();
@@ -44,6 +45,7 @@ public class AskRideFragment extends Fragment {
         timeStart.put("minute",-1);
         timeEnd.put("hour",-1);
         timeEnd.put("minute",-1);
+        this.destination = destination;
     }
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -70,8 +72,8 @@ public class AskRideFragment extends Fragment {
         sourceSpinner.setAdapter(sourceAdapter);
         destinationSpinner.setAdapter(destinationAdapter);
 
-        if(args != null)
-           destinationSpinner.setSelection(args.getInt("selectedDestination"));
+
+        destinationSpinner.setSelection(destination);
 
         timeIconStart = rootView.findViewById(R.id.time_icon_start);
         timeIconEnd = rootView.findViewById(R.id.time_icon_end);

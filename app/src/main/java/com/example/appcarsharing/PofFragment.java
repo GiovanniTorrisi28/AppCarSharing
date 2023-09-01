@@ -30,6 +30,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
+import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 
 import org.osmdroid.config.Configuration;
@@ -50,7 +51,6 @@ public class PofFragment extends Fragment {
     private LocationListener locationListener;
     private LocationManager locationManager;
     private boolean setting = false;
-
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -129,12 +129,19 @@ public class PofFragment extends Fragment {
 
                 FragmentManager fragmentManager = requireActivity().getSupportFragmentManager();
                 FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+
                 Bundle args = new Bundle();
                 args.putInt("selectedDestination",index + 1);
-                OfferRideFragment newFragment = new OfferRideFragment();
+                args.putInt("selectedPage",1);
+                HomeFragment newFragment = new HomeFragment();
                 newFragment.setArguments(args);
+
                 fragmentTransaction.replace(R.id.container, newFragment);
                 fragmentTransaction.addToBackStack(null);
+
+                BottomNavigationView bottomNavigationView = getActivity().findViewById(R.id.bottom_navigation);
+                bottomNavigationView.setSelectedItemId(R.id.home);
+
                 fragmentTransaction.commit();
 
             }
@@ -149,10 +156,15 @@ public class PofFragment extends Fragment {
                 FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
                 Bundle args = new Bundle();
                 args.putInt("selectedDestination",index + 1);
-                AskRideFragment newFragment = new AskRideFragment();
+                args.putInt("selectedPage",0);
+                HomeFragment newFragment = new HomeFragment();
                 newFragment.setArguments(args);
                 fragmentTransaction.replace(R.id.container, newFragment);
                 fragmentTransaction.addToBackStack(null);
+                BottomNavigationView bottomNavigationView = getActivity().findViewById(R.id.bottom_navigation);
+
+                bottomNavigationView.setSelectedItemId(R.id.home);
+
                 fragmentTransaction.commit();
 
             }

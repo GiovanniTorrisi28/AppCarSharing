@@ -26,23 +26,26 @@ public class HomeFragment extends Fragment {
 
         ViewPager viewPager = rootView.findViewById(R.id.viewPager);
 
-        TabPagerAdapter adapter = new TabPagerAdapter(getParentFragmentManager());
+        TabPagerAdapter adapter = new TabPagerAdapter(getParentFragmentManager(),0);
         viewPager.setAdapter(adapter);
 
         TabLayout tabLayout = rootView.findViewById(R.id.tab_layout);
         tabLayout.setupWithViewPager(viewPager);
 
         //fragment aperto dalla mappa
-       /* Bundle args = getArguments();
+        Bundle args = getArguments();
         if (args != null)
             tabLayout.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
                 @Override
                 public void onGlobalLayout() {
+                    adapter.setDestination(args.getInt("selectedDestination"));
+                    viewPager.setAdapter(adapter);
+
                     tabLayout.getTabAt(args.getInt("selectedPage")).select(); // L'indice 1 rappresenta il secondo elemento
                     tabLayout.getViewTreeObserver().removeOnGlobalLayoutListener(this);
                 }
             });
-*/
+
         return rootView;
     }
 
@@ -52,7 +55,7 @@ public class HomeFragment extends Fragment {
 
         ViewPager viewPager = rootView.findViewById(R.id.viewPager);
         viewPager.setCurrentItem(2);
-        TabPagerAdapter adapter = new TabPagerAdapter(getParentFragmentManager());
+        TabPagerAdapter adapter = new TabPagerAdapter(getParentFragmentManager(),0);
         viewPager.setAdapter(adapter);
 
         TabLayout tabLayout = rootView.findViewById(R.id.tab_layout);
