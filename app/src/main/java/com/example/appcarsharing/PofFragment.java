@@ -3,11 +3,11 @@ package com.example.appcarsharing;
 import android.Manifest;
 import android.annotation.SuppressLint;
 import android.app.Activity;
-import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.Point;
 import android.graphics.drawable.Drawable;
 import android.location.Location;
 import android.location.LocationListener;
@@ -17,8 +17,10 @@ import android.os.Build;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
 import android.preference.PreferenceManager;
@@ -84,39 +86,25 @@ public class PofFragment extends Fragment {
     private void addMarkers() {
         List<OverlayItem> items = new ArrayList<>();
 
-        // Aggiungi marcatori alle coordinate specifiche
-        GeoPoint marker1 = new GeoPoint(37.52427537205766, 15.070995366336996);
-        OverlayItem overlayItem1 = new OverlayItem("Cittadella Universitaria", "Descrizione Marker 1", marker1);
-        overlayItem1.setMarker(getContext().getResources().getDrawable(R.drawable.ic_marker_item));
-        items.add(overlayItem1);
+        List<PointOfInterest> pointsOfInterest = Arrays.asList(new PointOfInterest("Cittadella Universitaria"," Via S. Sofia 64 \n", new GeoPoint(37.52427537205766, 15.070995366336996),1),
+                new PointOfInterest("Monastero dei Benedettini"," Piazza Dante Alighieri 32",new GeoPoint(37.50374671642855, 15.080111448460787),2),
+                new PointOfInterest("Torre Biologica","Via S. Sofia 89",new GeoPoint(37.52983938041185, 15.067811450991744),3),
+                new PointOfInterest("Palazzo delle Scienze","Corso Italia 55",new GeoPoint(37.515439382057885, 15.09544739517285),4),
+                new PointOfInterest("Villa Cerami"," Via Crociferi 91",new GeoPoint(37.50660797206224, 15.084817295172298),5)
+        );
 
-        GeoPoint marker2 = new GeoPoint(37.50374671642855, 15.080111448460787);
-        OverlayItem overlayItem2 = new OverlayItem("Monastero dei Benedettini", "Descrizione Marker 1", marker2);
-        overlayItem2.setMarker(getContext().getResources().getDrawable(R.drawable.ic_marker_item));
-        items.add(overlayItem2);
-
-        GeoPoint marker3 = new GeoPoint(37.52983938041185, 15.067811450991744);
-        OverlayItem overlayItem3 = new OverlayItem("Torre Biologica", "Descrizione Marker 1", marker3);
-        overlayItem3.setMarker(getContext().getResources().getDrawable(R.drawable.ic_marker_item));
-        items.add(overlayItem3);
-
-        GeoPoint marker4 = new GeoPoint(37.515439382057885, 15.09544739517285);
-        OverlayItem overlayItem4 = new OverlayItem("Palazzo delle Scienze", "Descrizione Marker 1", marker4);
-        overlayItem4.setMarker(getContext().getResources().getDrawable(R.drawable.ic_marker_item));
-        items.add(overlayItem4);
-
-        GeoPoint marker5 = new GeoPoint(37.50660797206224, 15.084817295172298);
-        OverlayItem overlayItem5 = new OverlayItem("Villa Cerami", "Descrizione Marker 1", marker5);
-        overlayItem5.setMarker(getContext().getResources().getDrawable(R.drawable.ic_marker_item));
-        items.add(overlayItem5);
-
+        //aggiunta dei marcatori
+        for(PointOfInterest pof: pointsOfInterest) {
+            OverlayItem item = new OverlayItem(pof.getNome(), pof.getIndirizzo(), pof.getCoordinate());
+            item.setMarker(getContext().getResources().getDrawable(R.drawable.ic_marker_item));
+            items.add(item);
+        }
 
         // Crea l'overlay dei marcatori
         ItemizedOverlayWithFocus<OverlayItem> overlay = new ItemizedOverlayWithFocus<>(getContext(), items,
                 new ItemizedIconOverlay.OnItemGestureListener<OverlayItem>() {
                     @Override
                     public boolean onItemSingleTapUp(final int index, final OverlayItem item) {
-                        // Mostra la dialog al click su un marker
                         showDialog(item.getTitle(), item.getSnippet());
                         return true;
                     }
@@ -131,13 +119,42 @@ public class PofFragment extends Fragment {
     }
 
     private void showDialog(String title, String message) {
-        AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+        MaterialAlertDialogBuilder builder = new MaterialAlertDialogBuilder(getContext());
         builder.setTitle(title);
         builder.setMessage(message);
-        builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+        builder.setPositiveButton("Offri passaggio", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 dialog.dismiss();
+
+                FragmentManager fragmentManager = requireActivity().getSupportFragmentManager();
+                FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+                Bundle args = new Bundle();
+                args.putInt("selectedPage",1);
+                HomeFragment newFragment = new HomeFragment();
+                newFragment.setArguments(args);
+                fragmentTransaction.replace(R.id.container, newFragment);
+                fragmentTransaction.addToBackStack(null);
+                fragmentTransaction.commit();
+
+            }
+        });
+
+        builder.setNegativeButton("Cerca passaggio", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss();
+
+                FragmentManager fragmentManager = requireActivity().getSupportFragmentManager();
+                FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+                Bundle args = new Bundle();
+                args.putInt("selectedPage",0);
+                HomeFragment newFragment = new HomeFragment();
+                newFragment.setArguments(args);
+                fragmentTransaction.replace(R.id.container, newFragment);
+                fragmentTransaction.addToBackStack(null);
+                fragmentTransaction.commit();
+
             }
         });
 

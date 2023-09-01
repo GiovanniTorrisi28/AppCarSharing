@@ -51,6 +51,8 @@ public class AskRideFragment extends Fragment {
         // Inflate the layout for this fragment
         View rootView = inflater.inflate(R.layout.fragment_ask_ride, container, false);
 
+        Bundle args = getArguments();
+
         //spinner per sorgente e destinazione
         Spinner sourceSpinner = rootView.findViewById(R.id.sourceSpinner);
         Spinner destinationSpinner = rootView.findViewById(R.id.destinationSpinner);
@@ -68,7 +70,9 @@ public class AskRideFragment extends Fragment {
         sourceSpinner.setAdapter(sourceAdapter);
         destinationSpinner.setAdapter(destinationAdapter);
 
-
+        /*if(args != null)
+           sourceSpinner.setSelection(args.getInt("prova"));
+*/
         timeIconStart = rootView.findViewById(R.id.time_icon_start);
         timeIconEnd = rootView.findViewById(R.id.time_icon_end);
         timeStartSetListener = new TimePickerDialog.OnTimeSetListener() {
@@ -137,7 +141,6 @@ public class AskRideFragment extends Fragment {
         submitButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                 System.out.println("debug");
                 String selectedSourceOption = (String) sourceSpinner.getSelectedItem();
                 String selectedDestinationOption = (String) destinationSpinner.getSelectedItem();
                 //controllo sulla sorgente
