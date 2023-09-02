@@ -122,37 +122,37 @@ public class Registration extends AppCompatActivity {
 
                 if (TextUtils.isEmpty(nome)) {
                     progressBar.setVisibility(View.GONE);
-                    Toast.makeText(Registration.this, "Enter nome", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(Registration.this, "Inserisci nome", Toast.LENGTH_SHORT).show();
                     return;
                 }
 
                 if (TextUtils.isEmpty(cognome)) {
                     progressBar.setVisibility(View.GONE);
-                    Toast.makeText(Registration.this, "Enter cognome", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(Registration.this, "Inserisci cognome", Toast.LENGTH_SHORT).show();
                     return;
                 }
 
-                if (TextUtils.isEmpty(email)) {
+                if (TextUtils.isEmpty(email) || !email.substring(email.indexOf("@")).equals("studium.unict.it")) {
                     progressBar.setVisibility(View.GONE);
-                    Toast.makeText(Registration.this, "Enter email", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(Registration.this, "Inserisci email universitaria", Toast.LENGTH_SHORT).show();
                     return;
                 }
 
                 if (TextUtils.isEmpty(password)) {
                     progressBar.setVisibility(View.GONE);
-                    Toast.makeText(Registration.this, "Enter password", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(Registration.this, "Inserisci password", Toast.LENGTH_SHORT).show();
                     return;
                 }
 
                 if (TextUtils.isEmpty(telefono)) {
                     progressBar.setVisibility(View.GONE);
-                    Toast.makeText(Registration.this, "Enter telephone number", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(Registration.this, "Inserisci numero di telefono", Toast.LENGTH_SHORT).show();
                     return;
                 }
 
                 if(selectedImageUri == null){
                     progressBar.setVisibility(View.GONE);
-                    Toast.makeText(Registration.this, "Enter image profile", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(Registration.this, "Inserisci immagine del profilo", Toast.LENGTH_SHORT).show();
                     return;
                 }
 
