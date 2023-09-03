@@ -70,7 +70,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Orario"
-                android:layout_marginStart="8dp" />
+                android:layout_marginStart="8dp"
+                android:id = "@+id/timeText"/>
 
             <!-- Icona della data -->
             <ImageView
@@ -86,7 +87,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Data"
-                android:layout_marginStart="8dp" />
+                android:layout_marginStart="8dp"
+                android:id = "@+id/calendarText"/>
 
             <!-- Icona del veicolo -->
             <ImageView

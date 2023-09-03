@@ -69,7 +69,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"
-                android:text="Inizio fascia" />
+                android:text="Inizio fascia"
+                android:id = "@+id/timeStartText"/>
 
             <ImageView
                 android:id="@+id/time_icon_end"
@@ -84,7 +85,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"
-                android:text="Fine fascia" />
+                android:text="Fine fascia"
+                android:id = "@+id/timeEndText"/>
 
 
             <ImageView
@@ -100,7 +102,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"
-                android:text="Data" />
+                android:text="Data"
+                android:id = "@+id/calendarText"/>
 
         </LinearLayout>
 

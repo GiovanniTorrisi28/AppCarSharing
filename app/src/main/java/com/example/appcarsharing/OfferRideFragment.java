@@ -39,6 +39,8 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import org.w3c.dom.Text;
+
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.ArrayList;
@@ -85,11 +87,7 @@ public class OfferRideFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         rootView = inflater.inflate(R.layout.fragment_offer_ride, container, false);
 
-      /*  for(int i=0;i< fieldFilled.length;i++)
-                fieldFilled[i] = false;
 
-        setFieldColor();
-     */
         final Utente[] utente = new Utente[1];
 
         calendarIcon = rootView.findViewById(R.id.calendar_icon);
@@ -105,12 +103,19 @@ public class OfferRideFragment extends Fragment {
         };
 
         // Aggiungi un listener al clic sull'icona del calendario
-        calendarIcon.setOnClickListener(new View.OnClickListener() {
+        View.OnClickListener handleCalendarClick = new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                showDatePicker(Calendar.getInstance().get(Calendar.DAY_OF_MONTH), Calendar.getInstance().get(Calendar.MONTH), Calendar.getInstance().get(Calendar.YEAR));
+                Integer day = date.get("day").equals(-1) ? Calendar.getInstance().get(Calendar.DAY_OF_MONTH) : date.get("day");
+                Integer month = date.get("month").equals(-1) ? Calendar.getInstance().get(Calendar.MONTH) : date.get("month");
+                Integer year = date.get("year").equals(-1) ? Calendar.getInstance().get(Calendar.YEAR) : date.get("year");
+                showDatePicker(day,month,year);
             }
-        });
+        };
+        calendarIcon.setOnClickListener(handleCalendarClick);
+
+        TextView calendarText = rootView.findViewById(R.id.calendarText);
+        calendarText.setOnClickListener(handleCalendarClick);
 
         //icona orologio
         timeIcon = rootView.findViewById(R.id.time_icon);
@@ -124,22 +129,32 @@ public class OfferRideFragment extends Fragment {
         };
 
         // Aggiungi un listener al clic sull'icona dell'orario
-        timeIcon.setOnClickListener(new View.OnClickListener() {
+        View.OnClickListener handleTimeClick = new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                showTimePicker(Calendar.getInstance().get(Calendar.HOUR_OF_DAY), Calendar.getInstance().get(Calendar.MINUTE));
+                Integer hour = time.get("hour").equals(-1) ? Calendar.getInstance().get(Calendar.HOUR_OF_DAY) : time.get("hour");
+                Integer minute = time.get("minute").equals(-1) ? Calendar.getInstance().get(Calendar.MINUTE) : time.get("minute");
+                showTimePicker(hour,minute);
             }
-        });
+        };
+        timeIcon.setOnClickListener(handleTimeClick);
+
+        TextView timeText = rootView.findViewById(R.id.timeText);
+        timeText.setOnClickListener(handleTimeClick);
 
         //icona auto
         carIcon = rootView.findViewById(R.id.car_icon);
-        carIcon.setOnClickListener(new View.OnClickListener() {
+        View.OnClickListener handleCarClick = new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 // Creazione e visualizzazione del dialog
                 openCarDialog();
             }
-        });
+        };
+        carIcon.setOnClickListener(handleCarClick);
+
+        TextView textVeicolo = rootView.findViewById(R.id.textView_veicolo);
+        textVeicolo.setOnClickListener(handleCarClick);
 
 
         //spinner per sorgente e destinazione

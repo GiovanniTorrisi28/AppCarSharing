@@ -19,8 +19,11 @@ import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.ImageView;
 import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
+
+import org.w3c.dom.Text;
 
 import java.util.HashMap;
 import java.util.List;
@@ -77,6 +80,9 @@ public class AskRideFragment extends Fragment {
 
         timeIconStart = rootView.findViewById(R.id.time_icon_start);
         timeIconEnd = rootView.findViewById(R.id.time_icon_end);
+        TextView timeStartText = rootView.findViewById(R.id.timeStartText);
+        TextView timeEndText = rootView.findViewById(R.id.timeEndText);
+
         timeStartSetListener = new TimePickerDialog.OnTimeSetListener() {
             @Override
             public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
@@ -116,6 +122,8 @@ public class AskRideFragment extends Fragment {
 
         timeIconStart.setOnClickListener(handleClickTimeStart);
         timeIconEnd.setOnClickListener(handleClickTimeEnd);
+        timeStartText.setOnClickListener(handleClickTimeStart);
+        timeEndText.setOnClickListener(handleClickTimeEnd);
 
         //icona del calendario
         calendarIcon = rootView.findViewById(R.id.calendar_icon);
@@ -130,13 +138,19 @@ public class AskRideFragment extends Fragment {
         };
 
         // Aggiungi un listener al clic sull'icona del calendario
-        calendarIcon.setOnClickListener(new View.OnClickListener() {
+        View.OnClickListener handleClickCalendar = new View.OnClickListener() {
             @Override
-            public void onClick(View v) {
-                showDatePicker(Calendar.getInstance().get(Calendar.DAY_OF_MONTH),Calendar.getInstance().get(Calendar.MONTH),Calendar.getInstance().get(Calendar.YEAR));
+            public void onClick(View view) {
+                Integer day = date.get("day").equals(-1) ? Calendar.getInstance().get(Calendar.DAY_OF_MONTH) : date.get("day");
+                Integer month = date.get("month").equals(-1) ? Calendar.getInstance().get(Calendar.MONTH) : date.get("month");
+                Integer year = date.get("year").equals(-1) ? Calendar.getInstance().get(Calendar.YEAR) : date.get("year");
+                showDatePicker(day,month,year);
             }
-        });
+        };
+        calendarIcon.setOnClickListener(handleClickCalendar);
 
+        TextView calendarText = rootView.findViewById(R.id.calendarText);
+        calendarText.setOnClickListener(handleClickCalendar);
 
         //gestione invio
         Button submitButton = rootView.findViewById(R.id.submitButton);
