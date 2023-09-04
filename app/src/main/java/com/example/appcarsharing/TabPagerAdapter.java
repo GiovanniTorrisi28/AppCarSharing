@@ -17,7 +17,7 @@ public class TabPagerAdapter extends FragmentStatePagerAdapter {
     private List<CharSequence> titles = Arrays.asList("Cerca Passaggio","Offri Passaggio");
     private int destination;
     public TabPagerAdapter(FragmentManager fm, int destination) {
-        super(fm);
+        super(fm, BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT);
         this.destination = destination;
     }
 
