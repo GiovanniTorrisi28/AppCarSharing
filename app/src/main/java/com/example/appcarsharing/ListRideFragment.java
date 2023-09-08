@@ -96,6 +96,11 @@ public class ListRideFragment extends Fragment {
     }
 
     private boolean checkRide(Ride ride,String userId, Bundle args) {
+
+        //controllo se ci sono posti
+       if(ride.getPosti().equals("0"))
+            return false;
+
         //controllo sull'essere il guidatore
         if(ride.getGuidatore().getEmail().substring(0,ride.getGuidatore().getEmail().indexOf("@")).equals(userId))
             return false;

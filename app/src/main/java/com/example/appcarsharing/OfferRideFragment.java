@@ -300,14 +300,6 @@ public class OfferRideFragment extends Fragment {
                 textDettagli = dettagliEditText.getText().toString();
                 numPosti = postiEditText.getText().toString();
 
-                        /*
-                        Era codice per il colore della text view, da rivedere
-                        if(!textTarga.equals("") && !textDettagli.equals("")) {
-                            fieldFilled[0] = true;
-                        }
-                        else fieldFilled[0] = false;
-                            setFieldColor();
-                        */
             }
         }).setNegativeButton("CANCEL", new DialogInterface.OnClickListener() {
             @Override
@@ -316,13 +308,4 @@ public class OfferRideFragment extends Fragment {
             }
         }).show();
     }
-
-    //da rivedere
-    private void setFieldColor() {
-        TextView textViewVeicolo = rootView.findViewById(R.id.textView_veicolo);
-        if (!fieldFilled[0]) textViewVeicolo.setTextColor(Color.RED);
-        else textViewVeicolo.setTextColor(Color.GREEN);
-    }
-
-    //fare anche le altre caselle ??
 }
