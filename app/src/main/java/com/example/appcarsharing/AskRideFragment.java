@@ -35,9 +35,8 @@ public class AskRideFragment extends Fragment {
     private ImageView timeIconStart,timeIconEnd,calendarIcon;
     private HashMap<String, Integer> date;
     private HashMap<String,Integer> timeStart,timeEnd;
-    private int destination;
 
-    public AskRideFragment(int destination) {
+    public AskRideFragment() {
         date = new HashMap<>();
         timeStart = new HashMap<>();
         timeEnd = new HashMap<>();
@@ -48,7 +47,6 @@ public class AskRideFragment extends Fragment {
         timeStart.put("minute",-1);
         timeEnd.put("hour",-1);
         timeEnd.put("minute",-1);
-        this.destination = destination;
     }
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -75,8 +73,8 @@ public class AskRideFragment extends Fragment {
         sourceSpinner.setAdapter(sourceAdapter);
         destinationSpinner.setAdapter(destinationAdapter);
 
-
-        destinationSpinner.setSelection(destination);
+        if(args != null)
+           destinationSpinner.setSelection(args.getInt("selectedDestination"));
 
         timeIconStart = rootView.findViewById(R.id.time_icon_start);
         timeIconEnd = rootView.findViewById(R.id.time_icon_end);
@@ -189,7 +187,7 @@ public class AskRideFragment extends Fragment {
 
                 ListRideFragment newFragment =  new ListRideFragment();
                 Bundle args = new Bundle();
-                args.putString("date",date.get("day") + "/" + (date.get("month") + 1 < 10 ? "0" + (date.get("month") + 1): date.get("month") + 1) + "/" + date.get("year"));
+                args.putString("date",(date.get("day") + 1 < 10 ? "0" + date.get("day") : date.get("day")) + "/" + (date.get("month") + 1 < 10 ? "0" + (date.get("month") + 1): date.get("month") + 1) + "/" + date.get("year"));
                 args.putString("timeStart",timeStart.get("hour") + ":" + (timeStart.get("minute") < 10 ? "0" + timeStart.get("minute") : timeStart.get("minute")));
                 args.putString("timeEnd",timeEnd.get("hour") + ":" + (timeEnd.get("minute") < 10 ? "0" + timeEnd.get("minute") : timeEnd.get("minute")));
                 args.putString("source",selectedSourceOption);

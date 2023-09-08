@@ -66,9 +66,7 @@ public class OfferRideFragment extends Fragment {
     private DatabaseReference myRef;
     private FirebaseAuth mAuth;
     private FirebaseUser currentUser;
-    private int destination;
-
-    public OfferRideFragment(int destination) {
+    public OfferRideFragment() {
         date = new HashMap<>();
         time = new HashMap<>();
         date.put("day", -1);
@@ -80,7 +78,6 @@ public class OfferRideFragment extends Fragment {
         currentUser = mAuth.getCurrentUser();
         myRef = FirebaseDatabase.getInstance().getReference("Utenti").
                 child(currentUser.getEmail().substring(0, currentUser.getEmail().indexOf("@")));
-        this.destination = destination;
     }
 
     @Override
@@ -174,7 +171,9 @@ public class OfferRideFragment extends Fragment {
         sourceSpinner.setAdapter(sourceAdapter);
         destinationSpinner.setAdapter(destinationAdapter);
 
-        destinationSpinner.setSelection(destination);
+        Bundle args = getArguments();
+        if(args != null)
+           destinationSpinner.setSelection(args.getInt("selectedDestination"));
 
         //gestione invio
         Button submitButton = rootView.findViewById(R.id.submitButton);

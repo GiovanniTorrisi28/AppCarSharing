@@ -129,20 +129,15 @@ public class PofFragment extends Fragment {
 
                 Bundle args = new Bundle();
                 args.putInt("selectedDestination",index + 1);
-                args.putInt("selectedPage",1);
 
                 FragmentManager fragmentManager = requireActivity().getSupportFragmentManager();
                 FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-                HomeFragment newFragment = new HomeFragment();
+                OfferRideFragment newFragment = new OfferRideFragment();
                 newFragment.setArguments(args);
 
                 fragmentTransaction.replace(R.id.container, newFragment);
                 fragmentTransaction.addToBackStack(null);
                 fragmentTransaction.commit();
-
-                BottomNavigationView bottomNavigationView = getActivity().findViewById(R.id.bottom_navigation);
-                bottomNavigationView.setSelectedItemId(R.id.home);
-
 
             }
         });
@@ -154,19 +149,15 @@ public class PofFragment extends Fragment {
 
                 Bundle args = new Bundle();
                 args.putInt("selectedDestination",index + 1);
-                args.putInt("selectedPage",0);
 
                 FragmentManager fragmentManager = requireActivity().getSupportFragmentManager();
                 FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-                HomeFragment newFragment = new HomeFragment();
+                AskRideFragment newFragment = new AskRideFragment();
                 newFragment.setArguments(args);
 
                 fragmentTransaction.replace(R.id.container, newFragment);
                 fragmentTransaction.addToBackStack(null);
                 fragmentTransaction.commit();
-
-                BottomNavigationView bottomNavigationView = getActivity().findViewById(R.id.bottom_navigation);
-                bottomNavigationView.setSelectedItemId(R.id.home);
 
             }
         });

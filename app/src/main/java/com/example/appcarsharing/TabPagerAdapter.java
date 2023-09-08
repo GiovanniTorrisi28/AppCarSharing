@@ -15,23 +15,17 @@ import java.util.List;
 public class TabPagerAdapter extends FragmentStatePagerAdapter {
     private static final int NUM_TABS = 2;
     private List<CharSequence> titles = Arrays.asList("Cerca Passaggio","Offri Passaggio");
-    private int destination;
-    public TabPagerAdapter(FragmentManager fm, int destination) {
-        super(fm, BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT);
-        this.destination = destination;
-    }
-
-    public void setDestination(int destination){
-        this.destination = destination;
+    public TabPagerAdapter(FragmentManager fm) {
+        super(fm,BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT);
     }
 
     @Override
     public Fragment getItem(int position) {
         switch (position) {
             case 0:
-                return new AskRideFragment(destination);
+                return new AskRideFragment();
             case 1:
-                return new OfferRideFragment(destination);
+                return new OfferRideFragment();
             default:
                 return new SettingsFragment();
         }
