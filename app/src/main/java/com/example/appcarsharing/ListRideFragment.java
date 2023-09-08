@@ -86,9 +86,7 @@ public class ListRideFragment extends Fragment {
                 adapter.notifyDataSetChanged();
             }
             @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-
-            }
+            public void onCancelled(@NonNull DatabaseError error) {}
 
         });
 

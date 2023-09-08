@@ -6,7 +6,7 @@
     android:padding="10dp"
     android:rowCount="1"
     android:background="@drawable/rounded_border"
-    android:backgroundTint="#eee"
+    android:backgroundTint="#eff"
     android:layout_marginLeft="10dp"
     android:layout_marginRight="10dp">
 
