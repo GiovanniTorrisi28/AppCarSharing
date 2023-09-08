@@ -18,18 +18,18 @@
         android:shape="oval"
         android:layout_marginBottom="40dp">
 
-        <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:scaleType="centerCrop"
-            android:id="@+id/profile_image_view"/>
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:scaleType="centerCrop"
+                android:id="@+id/profile_image_view" />
 
     </androidx.cardview.widget.CardView>
 
     <ProgressBar
         android:id="@+id/progressBar"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="20dp"
+        android:layout_height="20dp"
         android:visibility="gone" />
 
     <EditText
