@@ -62,10 +62,7 @@ public class ListRideFragment extends Fragment {
         //lettura dei parametri
         TextView textView = rootView.findViewById(R.id.textView);
         Bundle args = getArguments();
-        textView.setText("Data: " + args.getString("date") +  "\n"
-                + "Fascia Oraria: " + args.getString("timeStart") + "-" + args.getString("timeEnd") + "\n"
-                + "Sorgente: " + args.getString("source") + "\n"
-                + "Destinazione: " + args.getString("destination"));
+        textView.setText("Risultati:");
 
         String email = FirebaseAuth.getInstance().getCurrentUser().getEmail();
         String userId = email.substring(0, email.indexOf("@"));

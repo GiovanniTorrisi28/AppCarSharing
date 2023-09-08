@@ -3,6 +3,7 @@ package com.example.appcarsharing;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.pm.PackageManager;
 import android.os.Build;
 import android.view.LayoutInflater;
@@ -20,6 +21,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -65,21 +67,22 @@ public class RideAdapter extends RecyclerView.Adapter<RideAdapter.RideViewHolder
     public class RideViewHolder extends RecyclerView.ViewHolder {
 
         private TextView seatsTextView, driverTextView, timeTextView;
-        private Button prenotaBtn;
+        private Button prenotaBtn,infoBtn;
 
         public RideViewHolder(@NonNull View itemView) {
             super(itemView);
             seatsTextView = itemView.findViewById(R.id.posti_text_view);
             driverTextView = itemView.findViewById(R.id.guidatore_text_view);
-            timeTextView = itemView.findViewById(R.id.ora_text_view);
+            timeTextView = itemView.findViewById(R.id.data_ora_text_view);
             prenotaBtn = itemView.findViewById(R.id.prenotaButton);
+            infoBtn = itemView.findViewById(R.id.infoButton);
         }
 
         public void bind(Ride passaggio) {
 
             seatsTextView.setText("Posti disponibili: " + String.valueOf(passaggio.getPosti()));
             driverTextView.setText("Guidatore: " + passaggio.getGuidatore().getNome() + " " + passaggio.getGuidatore().getCognome());
-            timeTextView.setText("Ora di partenza: " + passaggio.getOrario());
+            timeTextView.setText("Data e ora: " + passaggio.getData() + ", " + passaggio.getOrario() );
             prenotaBtn.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -104,6 +107,13 @@ public class RideAdapter extends RecyclerView.Adapter<RideAdapter.RideViewHolder
                         }
                     });
 
+                }
+            });
+
+            infoBtn.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    showInfoDialog(passaggio);
                 }
             });
         }
@@ -160,6 +170,36 @@ public class RideAdapter extends RecyclerView.Adapter<RideAdapter.RideViewHolder
                 notificationManager.createNotificationChannel(channel);
             }
         }
+
+
+        private void showInfoDialog(Ride passaggio) {
+            View dialogView = LayoutInflater.from(context).inflate(R.layout.my_ride_dialog, null);
+
+            TextView sorgenteTextView = dialogView.findViewById(R.id.sorgente_textView);
+            TextView destinazioneTextView = dialogView.findViewById(R.id.destinazione_textView);
+            TextView targaTextView = dialogView.findViewById(R.id.targa_textView);
+            TextView dettagliTextView = dialogView.findViewById(R.id.dettagli_textView);
+            TextView passeggeriTextView = dialogView.findViewById(R.id.passeggeri_textView);
+
+            sorgenteTextView.setText(passaggio.getSorgente());
+            destinazioneTextView.setText(passaggio.getDestinazione());
+            targaTextView.setText(passaggio.getTarga());
+            dettagliTextView.setText(passaggio.getDettagliVeicolo());
+
+            String passeggeri = "";
+            for(int i = 1; i < passaggio.getUtenti().size(); i++)
+                passeggeri += passaggio.getUtenti().get(i).getNome() + " " + passaggio.getUtenti().get(i).getCognome() + ", ";
+
+            passeggeriTextView.setText(passeggeri);
+
+            new MaterialAlertDialogBuilder(context).setTitle("Info passaggio").setView(dialogView).setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialogInterface, int i) {
+
+                }
+            }).show();
+        }
+
 
     }
 }

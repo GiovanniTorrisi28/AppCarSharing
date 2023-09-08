@@ -86,7 +86,7 @@ public class MyRideAdapter extends RecyclerView.Adapter<MyRideAdapter.RideViewHo
 
         public void bind(Ride passaggio) {
 
-            dataOraTextView.setText(passaggio.getData() + " - " + passaggio.getOrario());
+            dataOraTextView.setText(passaggio.getData() + ", " + passaggio.getOrario());
 
             if(passaggio.getGuidatore().getEmail().equals(user.getEmail()))
                guidatoreTextView.setText("Tu");
