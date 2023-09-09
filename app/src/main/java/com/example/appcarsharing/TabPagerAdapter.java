@@ -27,7 +27,7 @@ public class TabPagerAdapter extends FragmentStatePagerAdapter {
             case 1:
                 return new OfferRideFragment();
             default:
-                return new SettingsFragment();
+                return new AskRideFragment();
         }
     }
 
