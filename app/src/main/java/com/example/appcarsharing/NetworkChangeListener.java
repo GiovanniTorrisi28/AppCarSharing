@@ -21,13 +21,6 @@ public class NetworkChangeListener extends BroadcastReceiver {
     public void onReceive(Context context, Intent intent) {
         if(!isNetworkAvailable(context)){
             View dialogView = LayoutInflater.from(context).inflate(R.layout.check_internet_dialog, null);
-            /*AlertDialog.Builder builder = new AlertDialog.Builder(context);
-            builder.setView(dialogView);
-            AlertDialog dialog = builder.create();
-            dialog.show();
-            dialog.setCancelable(false);
-            dialog.getWindow().setGravity(Gravity.CENTER);
-*/
             MaterialAlertDialogBuilder builder = new MaterialAlertDialogBuilder(context).setView(dialogView).setCancelable(false);
             AlertDialog dialog = builder.show();
             Button verificaBtn = dialogView.findViewById(R.id.verifica_btn);
@@ -35,13 +28,9 @@ public class NetworkChangeListener extends BroadcastReceiver {
                 @Override
                 public void onClick(View view) {
                     dialog.dismiss();
-                    System.out.println("qua");
                     onReceive(context,intent);
                 }
             });
-
-
-            //Toast.makeText(context,"no internet",Toast.LENGTH_LONG).show();
         }
     }
 

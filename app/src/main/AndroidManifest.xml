@@ -21,8 +21,11 @@
         <activity
             android:name=".Welcome"
             android:exported="true"
-            android:theme="@style/Theme.AppCarSharing.NoActionBar" >
-
+            android:theme="@style/Theme.AppCarSharing.NoActionBar">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
         </activity>
         <activity
             android:name=".Registration"
@@ -32,10 +35,6 @@
             android:name=".Login"
             android:exported="true"
             android:theme="@style/Theme.AppCarSharing.NoActionBar">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
         </activity>
         <activity
             android:name=".MainActivity"

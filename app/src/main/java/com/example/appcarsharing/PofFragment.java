@@ -51,10 +51,11 @@ public class PofFragment extends Fragment {
     private LocationListener locationListener;
     private LocationManager locationManager;
     private boolean setting = false;
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
+
         View rootView = inflater.inflate(R.layout.fragment_pof, container, false);
 
         mapView = rootView.findViewById(R.id.map_view);
@@ -86,15 +87,15 @@ public class PofFragment extends Fragment {
     private void addMarkers() {
         List<OverlayItem> items = new ArrayList<>();
 
-        List<PointOfInterest> pointsOfInterest = Arrays.asList(new PointOfInterest("Cittadella Universitaria"," Via S. Sofia 64", new GeoPoint(37.52427537205766, 15.070995366336996),1),
-                new PointOfInterest("Monastero dei Benedettini"," Piazza Dante Alighieri 32",new GeoPoint(37.50374671642855, 15.080111448460787),2),
-                new PointOfInterest("Torre Biologica","Via S. Sofia 89",new GeoPoint(37.52983938041185, 15.067811450991744),3),
-                new PointOfInterest("Palazzo delle Scienze","Corso Italia 55",new GeoPoint(37.515439382057885, 15.09544739517285),4),
-                new PointOfInterest("Villa Cerami"," Via Crociferi 91",new GeoPoint(37.50660797206224, 15.084817295172298),5)
+        List<PointOfInterest> pointsOfInterest = Arrays.asList(new PointOfInterest("Cittadella Universitaria", " Via S. Sofia 64", new GeoPoint(37.52427537205766, 15.070995366336996), 1),
+                new PointOfInterest("Monastero dei Benedettini", " Piazza Dante Alighieri 32", new GeoPoint(37.50374671642855, 15.080111448460787), 2),
+                new PointOfInterest("Torre Biologica", "Via S. Sofia 89", new GeoPoint(37.52983938041185, 15.067811450991744), 3),
+                new PointOfInterest("Palazzo delle Scienze", "Corso Italia 55", new GeoPoint(37.515439382057885, 15.09544739517285), 4),
+                new PointOfInterest("Villa Cerami", " Via Crociferi 91", new GeoPoint(37.50660797206224, 15.084817295172298), 5)
         );
 
         //aggiunta dei marcatori
-        for(PointOfInterest pof: pointsOfInterest) {
+        for (PointOfInterest pof : pointsOfInterest) {
             OverlayItem item = new OverlayItem(pof.getNome(), pof.getIndirizzo() + "\n" + pof.getCoordinate().getLatitude() + " " + pof.getCoordinate().getLongitude(), pof.getCoordinate());
             item.setMarker(getContext().getResources().getDrawable(R.drawable.ic_marker_item));
             items.add(item);
@@ -105,7 +106,7 @@ public class PofFragment extends Fragment {
                 new ItemizedIconOverlay.OnItemGestureListener<OverlayItem>() {
                     @Override
                     public boolean onItemSingleTapUp(final int index, final OverlayItem item) {
-                        showDialog(item.getTitle(), item.getSnippet(),index);
+                        showDialog(item.getTitle(), item.getSnippet(), index);
                         return true;
                     }
 
@@ -118,7 +119,7 @@ public class PofFragment extends Fragment {
         mapView.getOverlays().add(overlay);
     }
 
-    private void showDialog(String title, String message,int index) {
+    private void showDialog(String title, String message, int index) {
         MaterialAlertDialogBuilder builder = new MaterialAlertDialogBuilder(getContext());
         builder.setTitle(title);
         builder.setMessage(message);
@@ -128,7 +129,7 @@ public class PofFragment extends Fragment {
                 dialog.dismiss();
 
                 Bundle args = new Bundle();
-                args.putInt("selectedDestination",index + 1);
+                args.putInt("selectedDestination", index + 1);
 
                 FragmentManager fragmentManager = requireActivity().getSupportFragmentManager();
                 FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
@@ -148,7 +149,7 @@ public class PofFragment extends Fragment {
                 dialog.dismiss();
 
                 Bundle args = new Bundle();
-                args.putInt("selectedDestination",index + 1);
+                args.putInt("selectedDestination", index + 1);
 
                 FragmentManager fragmentManager = requireActivity().getSupportFragmentManager();
                 FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
@@ -171,10 +172,10 @@ public class PofFragment extends Fragment {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         if (requestCode == LOCATION_PERMISSION_REQUEST_CODE) {
             if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-               //permessi concessi
+                //permessi concessi
                 addMyPositionMarker();
             } else {
-               //permessi negati
+                //permessi negati
             }
         }
     }
@@ -185,8 +186,8 @@ public class PofFragment extends Fragment {
         myMarker = new Marker(mapView);
         myMarker.setIcon(getContext().getResources().getDrawable(R.drawable.baseline_circle_24));
         Location lastKnownLocation = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
-        if(lastKnownLocation != null)
-           myMarker.setPosition(new GeoPoint(lastKnownLocation.getLatitude(),lastKnownLocation.getLongitude()));
+        if (lastKnownLocation != null)
+            myMarker.setPosition(new GeoPoint(lastKnownLocation.getLatitude(), lastKnownLocation.getLongitude()));
         myMarker.setTitle("Posizione corrente");
 
         AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(getContext());
@@ -208,7 +209,7 @@ public class PofFragment extends Fragment {
             public void onProviderEnabled(String provider) {
                 // GPS attivato
                 if (provider.equals(LocationManager.GPS_PROVIDER)) {
-                   // alertDialog.dismiss();
+                    //  alertDialog.dismiss();
                     mapView.getOverlays().add(myMarker);
                 }
             }
@@ -217,11 +218,10 @@ public class PofFragment extends Fragment {
             public void onProviderDisabled(String provider) {
                 //GPS disabilitato
                 if (provider.equals(LocationManager.GPS_PROVIDER)) {
-                    System.out.println("Gps disattivato");
                     Toast.makeText(getContext(), "Per vedere la tua posizione riattiva il GPS", Toast.LENGTH_LONG).show();
                     mapView.getOverlays().remove(myMarker);
                     mapView.invalidate();
-                   // alertDialog.show();
+                    //alertDialog.show();
                 }
             }
 
@@ -229,17 +229,6 @@ public class PofFragment extends Fragment {
 
         boolean isGPSEnabled = locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER);
         if (!isGPSEnabled) {
-            // GPS non abilitato, richiedi all'utente di attivarlo
-           /* alertDialogBuilder.setTitle("GPS disabilitato");
-            alertDialogBuilder.setMessage("Il GPS è disabilitato. Vuoi andare alle impostazioni per abilitarlo?");
-            alertDialogBuilder.setPositiveButton("Impostazioni", (dialog, which) -> {
-                Intent intent = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
-                startActivity(intent);
-                setting = true;
-            });
-            alertDialogBuilder.setNegativeButton("Annulla", (dialog, which) -> dialog.cancel());
-            alertDialog.show();
-            */
             Toast.makeText(getContext(), "Per vedere la tua posizione attiva il GPS", Toast.LENGTH_LONG).show();
         } else {
             // GPS abilitato, procedi con la richiesta di aggiornamenti sulla posizione
@@ -281,11 +270,11 @@ public class PofFragment extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
-        if(setting){
-           if (ActivityCompat.checkSelfPermission(requireContext(), android.Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED && locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
-               addMyPositionMarker();
-               setting = false;
-           }
+        if (setting) {
+            if (ActivityCompat.checkSelfPermission(requireContext(), android.Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED && locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
+                addMyPositionMarker();
+                setting = false;
+            }
         }
     }
 }

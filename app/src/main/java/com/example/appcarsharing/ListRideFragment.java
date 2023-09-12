@@ -47,21 +47,16 @@ public class ListRideFragment extends Fragment {
 
         recyclerView = rootView.findViewById(R.id.recycler_view);
 
-        // Inizializza e imposta il LayoutManager
+
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getContext());
         recyclerView.setLayoutManager(layoutManager);
-
-        // Inizializza la lista dei passaggi (puoi popolarla con i dati da Firebase)
         passaggiList = new ArrayList<>();
-
-        // Inizializza l'adattatore e collegalo al RecyclerView
         adapter = new RideAdapter(passaggiList);
         recyclerView.setAdapter(adapter);
 
-
-        //lettura dei parametri
-        TextView textView = rootView.findViewById(R.id.textView);
         Bundle args = getArguments();
+
+        TextView textView = rootView.findViewById(R.id.textView);
         textView.setText("Risultati:");
 
         String email = FirebaseAuth.getInstance().getCurrentUser().getEmail();
@@ -74,11 +69,9 @@ public class ListRideFragment extends Fragment {
             public void onDataChange(DataSnapshot dataSnapshot) {
                 passaggiList.clear();
                 for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
-
                     Ride ride = snapshot.getValue(Ride.class);
                     if(checkRide(ride,userId,args))
                         passaggiList.add(ride);
-
                 }
                 adapter.notifyDataSetChanged();
             }
@@ -120,11 +113,9 @@ public class ListRideFragment extends Fragment {
 
         //controllo sull'essere passeggero
         for(Utente u: ride.getUtenti()){
-            if(u.getEmail().substring(0,u.getEmail().indexOf("@")).equals(userId)){
+            if(u.getEmail().substring(0,u.getEmail().indexOf("@")).equals(userId))
                 return false;
-            }
         }
-
 
         return true;
     }

@@ -264,10 +264,5 @@ public class ProfileFragment extends Fragment {
             System.out.println("Errore nel caricamento della foto profilo");
         });
     }
-
-    private void changeUserPhoto(View rootView,Utente utente){
-
-
-    }
 }
 

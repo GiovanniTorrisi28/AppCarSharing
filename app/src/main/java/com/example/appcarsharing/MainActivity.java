@@ -28,39 +28,36 @@ import com.google.android.material.snackbar.Snackbar;
 public class MainActivity extends AppCompatActivity {
 
     BottomNavigationView bottomNavigationView;
-
     HomeFragment homeFragment = new HomeFragment();
     NotificationFragment notificationFragment = new NotificationFragment(this);
     PofFragment pofFragment = new PofFragment();
     ProfileFragment profileFragment = new ProfileFragment();
     NetworkChangeListener networkChangeListener = new NetworkChangeListener();
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        bottomNavigationView  = findViewById(R.id.bottom_navigation);
-        getSupportFragmentManager().beginTransaction().replace(R.id.container,homeFragment).commit();
+        bottomNavigationView = findViewById(R.id.bottom_navigation);
+        getSupportFragmentManager().beginTransaction().replace(R.id.container, homeFragment).commit();
 
         bottomNavigationView.setOnItemSelectedListener(new NavigationBarView.OnItemSelectedListener() {
             @SuppressLint("NonConstantResourceId")
             @Override
             public boolean onNavigationItemSelected(MenuItem item) {
 
-                if (item.getItemId() == R.id.home){
-                    getSupportFragmentManager().beginTransaction().replace(R.id.container,homeFragment).commit();
+                if (item.getItemId() == R.id.home) {
+                    getSupportFragmentManager().beginTransaction().replace(R.id.container, homeFragment).commit();
                     return true;
-                }
-                else if (item.getItemId() == R.id.notification){
-                    getSupportFragmentManager().beginTransaction().replace(R.id.container,notificationFragment).commit();
+                } else if (item.getItemId() == R.id.notification) {
+                    getSupportFragmentManager().beginTransaction().replace(R.id.container, notificationFragment).commit();
                     return true;
-                }
-                else if (item.getItemId() == R.id.pof){
-                    getSupportFragmentManager().beginTransaction().replace(R.id.container,pofFragment).commit();
+                } else if (item.getItemId() == R.id.pof) {
+                    getSupportFragmentManager().beginTransaction().replace(R.id.container, pofFragment).commit();
                     return true;
-                }
-                else if (item.getItemId() == R.id.profile){
-                    getSupportFragmentManager().beginTransaction().replace(R.id.container,profileFragment).commit();
+                } else if (item.getItemId() == R.id.profile) {
+                    getSupportFragmentManager().beginTransaction().replace(R.id.container, profileFragment).commit();
                     return true;
                 }
                 return false;
@@ -71,20 +68,16 @@ public class MainActivity extends AppCompatActivity {
         if (getIntent().getBooleanExtra("apriFragment", false)) {
             // Carica il fragment desiderato
             getSupportFragmentManager().beginTransaction()
-                    .replace(R.id.container,notificationFragment)
+                    .replace(R.id.container, notificationFragment)
                     .commit();
         }
-
-        //ConnectionCheckThread connectionCheckThread = new ConnectionCheckThread(getApplicationContext(),findViewById(android.R.id.content));
-        //connectionCheckThread.start();
-
 
     }
 
     @Override
     protected void onStart() {
         IntentFilter filter = new IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION);
-        registerReceiver(networkChangeListener,filter);
+        registerReceiver(networkChangeListener, filter);
         super.onStart();
     }
 

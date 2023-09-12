@@ -42,7 +42,7 @@ public class NotificationFragment extends Fragment {
     private Context appContext;
 
 
-    public NotificationFragment(Context context){
+    public NotificationFragment(Context context) {
         this.user = FirebaseAuth.getInstance().getCurrentUser();
         this.appContext = context;
     }
@@ -54,12 +54,11 @@ public class NotificationFragment extends Fragment {
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
         View rootView = inflater.inflate(R.layout.fragment_notification, container, false);
-        recyclerView = rootView.findViewById(R.id.recycler_view);
 
+        recyclerView = rootView.findViewById(R.id.recycler_view);
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getContext());
         recyclerView.setLayoutManager(layoutManager);
 
@@ -67,23 +66,20 @@ public class NotificationFragment extends Fragment {
         adapter = new NotificationAdapter(notificheList);
         recyclerView.setAdapter(adapter);
 
-
-        //lettura da firebase
-        DatabaseReference myRef = FirebaseDatabase.getInstance().getReference("notifiche")
-                .child(user.getEmail().substring(0,user.getEmail().indexOf("@")));
+        DatabaseReference myRef = FirebaseDatabase.getInstance().getReference("notifiche").child(user.getEmail().substring(0, user.getEmail().indexOf("@")));
         myRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 notificheList.clear();
                 for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
                     Notification notifica = snapshot.getValue(Notification.class);
-                    notificheList.add(0,notifica);
+                    notificheList.add(0, notifica);
                 }
 
                 adapter.notifyDataSetChanged();
 
                 //controlli necessari per evitare di mandare notifiche ad ogni apertura del fragment
-                if(getContext() == null) {  //se il fragment non è aperto
+                if (getContext() == null) {  //se il fragment non è aperto
                     lanciaNotifica();
                     return;
                 }
@@ -93,26 +89,23 @@ public class NotificationFragment extends Fragment {
                 }
 
             }
+
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
-
             }
 
         });
 
-
         return rootView;
     }
 
-    public void lanciaNotifica(){
+    public void lanciaNotifica() {
         NotificationManager notificationManager = appContext.getSystemService(NotificationManager.class);
-        String CHANNEL_ID="my_channel_id";
-        String channel_name="channel_name";
-        String channel_description="channel_description";
+        String CHANNEL_ID = "my_channel_id";
+        String channel_name = "channel_name";
+        String channel_description = "channel_description";
         if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
-            NotificationChannel channel = new NotificationChannel(CHANNEL_ID,
-                    channel_name,
-                    NotificationManager.IMPORTANCE_DEFAULT);
+            NotificationChannel channel = new NotificationChannel(CHANNEL_ID, channel_name, NotificationManager.IMPORTANCE_DEFAULT);
             channel.setDescription(channel_description);
             notificationManager.createNotificationChannel(channel);
         }
@@ -123,13 +116,9 @@ public class NotificationFragment extends Fragment {
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
         PendingIntent pendingIntent = PendingIntent.getActivity(appContext, 0, intent, PendingIntent.FLAG_IMMUTABLE);
 
-
-        NotificationCompat.Builder builder = new NotificationCompat.Builder(appContext, CHANNEL_ID)
-                .setSmallIcon(android.R.drawable.star_on)
-                .setContentTitle("Nuova notifica!")
+        NotificationCompat.Builder builder = new NotificationCompat.Builder(appContext, CHANNEL_ID).setSmallIcon(android.R.drawable.star_on).setContentTitle("Nuova notifica!")
                 //.setContentText("Sappi che è successo questo nel tuo sistema: ...")
-                .setPriority(NotificationCompat.PRIORITY_DEFAULT)
-                .setContentIntent(pendingIntent);
+                .setPriority(NotificationCompat.PRIORITY_DEFAULT).setContentIntent(pendingIntent);
         notificationManager.notify(0, builder.build());
     }
 

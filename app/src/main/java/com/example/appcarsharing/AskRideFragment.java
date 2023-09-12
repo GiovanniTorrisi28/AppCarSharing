@@ -51,28 +51,21 @@ public class AskRideFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
+
         View rootView = inflater.inflate(R.layout.fragment_ask_ride, container, false);
 
         Bundle args = getArguments();
 
-        //spinner per sorgente e destinazione
         Spinner sourceSpinner = rootView.findViewById(R.id.sourceSpinner);
         Spinner destinationSpinner = rootView.findViewById(R.id.destinationSpinner);
-
-        // Popolare gli spinner con le opzioni desiderate
         String[] sourceOptions = {"Partenza", "Cittadella Universitaria", "Monastero dei Benedettini", "Torre Biologica", "Palazzo delle Scienze", "Villa Cerami"};
         String[] destinationOptions = {"Destinazione", "Cittadella Universitaria", "Monastero dei Benedettini", "Torre Biologica", "Palazzo delle Scienze", "Villa Cerami"};
-
         ArrayAdapter<String> sourceAdapter = new ArrayAdapter<>(getContext(), android.R.layout.simple_spinner_item, sourceOptions);
         ArrayAdapter<String> destinationAdapter = new ArrayAdapter<>(getContext(), android.R.layout.simple_spinner_item, destinationOptions);
-
         sourceAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         destinationAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-
         sourceSpinner.setAdapter(sourceAdapter);
         destinationSpinner.setAdapter(destinationAdapter);
-
         if(args != null)
            destinationSpinner.setSelection(args.getInt("selectedDestination"));
 
@@ -84,7 +77,6 @@ public class AskRideFragment extends Fragment {
         timeStartSetListener = new TimePickerDialog.OnTimeSetListener() {
             @Override
             public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
-                // Qui puoi gestire l'orario selezionato dall'utente
                   timeStart.put("hour",hourOfDay);
                   timeStart.put("minute",minute);
             }
@@ -93,7 +85,6 @@ public class AskRideFragment extends Fragment {
         timeEndSetListener = new TimePickerDialog.OnTimeSetListener() {
             @Override
             public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
-                // Qui puoi gestire l'orario selezionato dall'utente
                 timeEnd.put("hour",hourOfDay);
                 timeEnd.put("minute",minute);
             }
@@ -103,7 +94,6 @@ public class AskRideFragment extends Fragment {
             public void onClick(View v) {
                 Integer hour = timeStart.get("hour").equals(-1) ? Calendar.getInstance().get(Calendar.HOUR_OF_DAY) : timeStart.get("hour");
                 Integer minute = timeStart.get("minute").equals(-1) ? Calendar.getInstance().get(Calendar.MINUTE) : timeStart.get("minute");
-
                 showTimePicker(hour,minute,timeStartSetListener);
             }
         };
@@ -113,7 +103,6 @@ public class AskRideFragment extends Fragment {
             public void onClick(View v) {
                 Integer hour = timeEnd.get("hour").equals(-1) ? Calendar.getInstance().get(Calendar.HOUR_OF_DAY) : timeEnd.get("hour");
                 Integer minute = timeEnd.get("minute").equals(-1) ? Calendar.getInstance().get(Calendar.MINUTE) : timeEnd.get("minute");
-
                 showTimePicker(hour,minute,timeEndSetListener);
             }
         };
@@ -123,7 +112,6 @@ public class AskRideFragment extends Fragment {
         timeStartText.setOnClickListener(handleClickTimeStart);
         timeEndText.setOnClickListener(handleClickTimeEnd);
 
-        //icona del calendario
         calendarIcon = rootView.findViewById(R.id.calendar_icon);
         dateSetListener = new DatePickerDialog.OnDateSetListener() {
             @Override
@@ -135,7 +123,6 @@ public class AskRideFragment extends Fragment {
             }
         };
 
-        // Aggiungi un listener al clic sull'icona del calendario
         View.OnClickListener handleClickCalendar = new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -150,19 +137,18 @@ public class AskRideFragment extends Fragment {
         TextView calendarText = rootView.findViewById(R.id.calendarText);
         calendarText.setOnClickListener(handleClickCalendar);
 
-        //gestione invio
         Button submitButton = rootView.findViewById(R.id.submitButton);
         submitButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 String selectedSourceOption = (String) sourceSpinner.getSelectedItem();
                 String selectedDestinationOption = (String) destinationSpinner.getSelectedItem();
-                //controllo sulla sorgente
+
                 if (selectedSourceOption.equals(sourceOptions[0])) {
                     Toast.makeText(getContext(), "Inserisci luogo di partenza", Toast.LENGTH_SHORT).show();
                     return;
                 }
-                //controllo sulla destinazione
+
                 if (selectedDestinationOption.equals(destinationOptions[0])) {
                     Toast.makeText(getContext(), "Inserisci luogo di destinazione", Toast.LENGTH_SHORT).show();
                     return;
@@ -183,8 +169,7 @@ public class AskRideFragment extends Fragment {
                     return;
                 }
 
-                //apri nuovo fragment
-
+                //apertura nuovo fragment
                 ListRideFragment newFragment =  new ListRideFragment();
                 Bundle args = new Bundle();
                 args.putString("date",(date.get("day") + 1 < 10 ? "0" + date.get("day") : date.get("day")) + "/" + (date.get("month") + 1 < 10 ? "0" + (date.get("month") + 1): date.get("month") + 1) + "/" + date.get("year"));
@@ -194,26 +179,19 @@ public class AskRideFragment extends Fragment {
                 args.putString("destination",selectedDestinationOption);
                 newFragment.setArguments(args);
 
-                // Ottieni il FragmentManager e avvia una transazione
                 FragmentManager fragmentManager = requireActivity().getSupportFragmentManager();
                 FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
 
                 // Sostituisci il fragment esistente con il nuovo fragment
                 fragmentTransaction.replace(R.id.container, newFragment);
 
-                // Aggiungi la transazione allo stack indietro in modo che possa essere annullata
                 fragmentTransaction.addToBackStack(null);
-
-                // Esegui la transazione
                 fragmentTransaction.commit();
 
             }});
-
                 return rootView;
     }
-
-
-
+    
     private void showTimePicker(Integer hour, Integer minute,TimePickerDialog.OnTimeSetListener listener) {
         TimePickerDialog timePickerDialog = new TimePickerDialog(
                 requireContext(),

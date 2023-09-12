@@ -22,7 +22,7 @@
            android:layout_height="60dp"
            android:scaleType="centerCrop"
            android:id = "@+id/imageview1"
-           android:src="@drawable/immagine"/>
+           />
 
         </androidx.cardview.widget.CardView>
 

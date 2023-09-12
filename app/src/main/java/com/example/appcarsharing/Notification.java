@@ -26,7 +26,6 @@ public class Notification {
         this.mittente = mittente;
     }
 
-
     public String getTitolo() {
         return titolo;
     }

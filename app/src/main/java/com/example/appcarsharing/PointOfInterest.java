@@ -16,7 +16,8 @@ public class PointOfInterest {
         this.id = id;
     }
 
-    public PointOfInterest(){}
+    public PointOfInterest() {
+    }
 
     public String getNome() {
         return nome;

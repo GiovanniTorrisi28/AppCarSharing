@@ -26,7 +26,6 @@ public class MyRideFragment extends Fragment {
     private RecyclerView recyclerView;
     private MyRideAdapter adapter;
     private List<Ride> passaggiList;
-
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -35,34 +34,26 @@ public class MyRideFragment extends Fragment {
 
         recyclerView = rootView.findViewById(R.id.recycler_view);
 
-        // Inizializza e imposta il LayoutManager
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getContext());
         recyclerView.setLayoutManager(layoutManager);
-
         passaggiList = new ArrayList<>();
         adapter = new MyRideAdapter(passaggiList);
         recyclerView.setAdapter(adapter);
 
-        //lettura da firebase
         DatabaseReference myRef = FirebaseDatabase.getInstance().getReference("passaggi");
         myRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 passaggiList.clear();
                 for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
-
                     Ride ride = snapshot.getValue(Ride.class);
                     if(checkRide(ride))
                        passaggiList.add(0,ride);
-
                 }
                 adapter.notifyDataSetChanged();
             }
             @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-
-            }
-
+            public void onCancelled(@NonNull DatabaseError error) {}
         });
         return rootView;
     }

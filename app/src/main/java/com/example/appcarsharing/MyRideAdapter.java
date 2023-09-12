@@ -93,7 +93,6 @@ public class MyRideAdapter extends RecyclerView.Adapter<MyRideAdapter.RideViewHo
             else
                 guidatoreTextView.setText(passaggio.getGuidatore().getNome() + " " + passaggio.getGuidatore().getCognome());
 
-            //pulsante info
             infoBtn.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
@@ -101,7 +100,6 @@ public class MyRideAdapter extends RecyclerView.Adapter<MyRideAdapter.RideViewHo
                 }
             });
 
-            //pulsante cancella
             cancellaBtn.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -208,7 +206,6 @@ public class MyRideAdapter extends RecyclerView.Adapter<MyRideAdapter.RideViewHo
                             @Override
                             public void onComplete(@NonNull Task<Void> task) {
                                 if (task.isSuccessful()) {
-                                    //sostituire con notifica vera
                                     System.out.println("notifica della cancellazione passaggio inviata con successo");
                                 } else {
                                     System.out.println("errore nel caricamneto della notifica cancellazione passaggio");
