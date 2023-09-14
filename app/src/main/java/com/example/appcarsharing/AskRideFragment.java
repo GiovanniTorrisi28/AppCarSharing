@@ -173,8 +173,8 @@ public class AskRideFragment extends Fragment {
                 ListRideFragment newFragment =  new ListRideFragment();
                 Bundle args = new Bundle();
                 args.putString("date",(date.get("day") + 1 < 10 ? "0" + date.get("day") : date.get("day")) + "/" + (date.get("month") + 1 < 10 ? "0" + (date.get("month") + 1): date.get("month") + 1) + "/" + date.get("year"));
-                args.putString("timeStart",timeStart.get("hour") + ":" + (timeStart.get("minute") < 10 ? "0" + timeStart.get("minute") : timeStart.get("minute")));
-                args.putString("timeEnd",timeEnd.get("hour") + ":" + (timeEnd.get("minute") < 10 ? "0" + timeEnd.get("minute") : timeEnd.get("minute")));
+                args.putString("timeStart",(timeStart.get("hour") + 1 < 10 ? "0" + timeStart.get("hour") : timeStart.get("hour")) + ":" + (timeStart.get("minute") + 1 < 10 ? "0" + timeStart.get("minute") : timeStart.get("minute")));
+                args.putString("timeEnd",(timeEnd.get("hour") + 1 < 10 ? "0" + timeEnd.get("hour") : timeEnd.get("hour")) + ":" + (timeEnd.get("minute")  + 1 < 10 ? "0" + timeEnd.get("minute") : timeEnd.get("minute")));
                 args.putString("source",selectedSourceOption);
                 args.putString("destination",selectedDestinationOption);
                 newFragment.setArguments(args);

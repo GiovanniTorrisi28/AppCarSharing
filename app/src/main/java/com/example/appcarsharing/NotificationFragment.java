@@ -45,27 +45,8 @@ public class NotificationFragment extends Fragment {
     public NotificationFragment(Context context) {
         this.user = FirebaseAuth.getInstance().getCurrentUser();
         this.appContext = context;
-    }
-
-    @Override
-    public void onAttach(@NonNull Context context) {
-        super.onAttach(context);
-        appContext = context.getApplicationContext();
-    }
-
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-
-        View rootView = inflater.inflate(R.layout.fragment_notification, container, false);
-
-        recyclerView = rootView.findViewById(R.id.recycler_view);
-        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getContext());
-        recyclerView.setLayoutManager(layoutManager);
-
-        notificheList = new ArrayList<>();
-        adapter = new NotificationAdapter(notificheList);
-        recyclerView.setAdapter(adapter);
-
+        this.notificheList = new ArrayList<>();
+        this.adapter = new NotificationAdapter(notificheList);
         DatabaseReference myRef = FirebaseDatabase.getInstance().getReference("notifiche").child(user.getEmail().substring(0, user.getEmail().indexOf("@")));
         myRef.addValueEventListener(new ValueEventListener() {
             @Override
@@ -78,6 +59,10 @@ public class NotificationFragment extends Fragment {
 
                 adapter.notifyDataSetChanged();
 
+                if(isFirstRead){
+                    isFirstRead = false;
+                    return;
+                }
                 //controlli necessari per evitare di mandare notifiche ad ogni apertura del fragment
                 if (getContext() == null) {  //se il fragment non è aperto
                     lanciaNotifica();
@@ -95,6 +80,24 @@ public class NotificationFragment extends Fragment {
             }
 
         });
+
+    }
+
+    @Override
+    public void onAttach(@NonNull Context context) {
+        super.onAttach(context);
+        appContext = context.getApplicationContext();
+    }
+
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+
+        View rootView = inflater.inflate(R.layout.fragment_notification, container, false);
+
+        recyclerView = rootView.findViewById(R.id.recycler_view);
+        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getContext());
+        recyclerView.setLayoutManager(layoutManager);
+        recyclerView.setAdapter(adapter);
 
         return rootView;
     }
