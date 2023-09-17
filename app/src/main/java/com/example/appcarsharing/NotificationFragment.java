@@ -51,10 +51,13 @@ public class NotificationFragment extends Fragment {
         myRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
+
                 notificheList.clear();
+                Notification ultimaNotifica = new Notification();
                 for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
                     Notification notifica = snapshot.getValue(Notification.class);
                     notificheList.add(0, notifica);
+                    ultimaNotifica = notifica;
                 }
 
                 adapter.notifyDataSetChanged();
@@ -63,6 +66,10 @@ public class NotificationFragment extends Fragment {
                     isFirstRead = false;
                     return;
                 }
+                user = FirebaseAuth.getInstance().getCurrentUser();
+                if(user.getEmail().equals(ultimaNotifica.getMittente().getEmail()))
+                    return;
+
                 //controlli necessari per evitare di mandare notifiche ad ogni apertura del fragment
                 if (getContext() == null) {  //se il fragment non è aperto
                     lanciaNotifica();
