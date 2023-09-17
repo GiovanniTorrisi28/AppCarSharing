@@ -19,8 +19,8 @@
         android:layout_marginBottom="40dp">
 
             <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="150dp"
+                android:layout_height="150dp"
                 android:scaleType="centerCrop"
                 android:id="@+id/profile_image_view" />
 
@@ -29,7 +29,7 @@
     <ProgressBar
         android:id="@+id/progressBar"
         android:layout_width="20dp"
-        android:layout_height="20dp"
+        android:layout_height="15dp"
         android:visibility="gone" />
 
     <EditText
@@ -81,26 +81,20 @@
         android:drawablePadding="8px"
         />
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="100dp"
-        android:gravity="center_vertical"
-        android:layout_marginTop="20dp"
-        android:orientation="vertical">
         <Button
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@drawable/rounded_border"
             android:text="I miei passaggi"
+            android:layout_marginTop="30dp"
             android:id="@+id/myRide_btn"/>
-
-    </LinearLayout>
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Logout"
         android:textColor="#ff0000"
+        android:layout_marginTop="15dp"
         android:id="@+id/logout_btn"/>
 
 

@@ -276,7 +276,7 @@ public class OfferRideFragment extends Fragment {
         dettagliEditText.setText(textDettagli);
         postiEditText.setText(numPosti);
 
-        new MaterialAlertDialogBuilder(getContext()).setTitle("Dati veicolo").setView(dialogView).setPositiveButton("GOT IT", new DialogInterface.OnClickListener() {
+        new MaterialAlertDialogBuilder(getContext()).setTitle("Dati veicolo").setView(dialogView).setPositiveButton("Ok", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
                 textTarga = targaEditText.getText().toString();
@@ -284,7 +284,7 @@ public class OfferRideFragment extends Fragment {
                 numPosti = postiEditText.getText().toString();
 
             }
-        }).setNegativeButton("CANCEL", new DialogInterface.OnClickListener() {
+        }).setNegativeButton("Annulla", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
 

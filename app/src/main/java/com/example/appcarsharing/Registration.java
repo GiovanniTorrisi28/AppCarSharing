@@ -68,11 +68,12 @@ public class Registration extends AppCompatActivity {
     NetworkChangeListener networkChangeListener = new NetworkChangeListener();
     Uri selectedImageUri;
     private static final int PERMISSION_REQUEST_READ_EXTERNAL_STORAGE = 1;
+
     @Override
     public void onStart() {
         super.onStart();
         IntentFilter filter = new IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION);
-        registerReceiver(networkChangeListener,filter);
+        registerReceiver(networkChangeListener, filter);
     }
 
     @Override
@@ -132,7 +133,7 @@ public class Registration extends AppCompatActivity {
                     return;
                 }
 
-                if (TextUtils.isEmpty(email) || !email.substring(email.indexOf("@")).equals("studium.unict.it")) {
+                if (TextUtils.isEmpty(email) || email.indexOf("@") == -1  || !email.substring(email.indexOf("@")).equals("@studium.unict.it")) {
                     progressBar.setVisibility(View.GONE);
                     Toast.makeText(Registration.this, "Inserisci email universitaria", Toast.LENGTH_SHORT).show();
                     return;
@@ -150,7 +151,7 @@ public class Registration extends AppCompatActivity {
                     return;
                 }
 
-                if(selectedImageUri == null){
+                if (selectedImageUri == null) {
                     progressBar.setVisibility(View.GONE);
                     Toast.makeText(Registration.this, "Inserisci immagine del profilo", Toast.LENGTH_SHORT).show();
                     return;
@@ -209,7 +210,7 @@ public class Registration extends AppCompatActivity {
         buttonPhoto.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-              requestStoragePermission();
+                requestStoragePermission();
             }
         });
 
@@ -224,14 +225,14 @@ public class Registration extends AppCompatActivity {
         }
     }
 
-    public String hashWith256(String textToHash){
+    public String hashWith256(String textToHash) {
         String encoded = "";
         try {
             MessageDigest digest = MessageDigest.getInstance("SHA-256");
             byte[] byteOfTextToHash = textToHash.getBytes(StandardCharsets.UTF_8);
             byte[] hashedByetArray = digest.digest(byteOfTextToHash);
             encoded = Base64.getEncoder().encodeToString(hashedByetArray);
-        }catch (NoSuchAlgorithmException exception){
+        } catch (NoSuchAlgorithmException exception) {
             System.out.println("L'algoritmo specifica per l'hashing non è valido");
             return textToHash;
         }
